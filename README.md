@@ -3,7 +3,9 @@
 
 The Aim of the Hotel Surplus Food Distribution System is to eliminate Food Waste and Distribute the Food to the people who need.
 
+#### Project Status : 
 
+I'm currently working in the backend part and connecting with the Frontend.
 
 ## Tech Stack
 
@@ -117,11 +119,6 @@ Start the server
   npm run start
 ```
 
-
-
-## Frontend
-
-I'm currently working in the backend part and connecting with the Frontend.
 
 ## Authors
 
