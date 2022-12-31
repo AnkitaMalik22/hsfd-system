@@ -13,11 +13,12 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout.js';
 import { logout } from '../../../actions/userActions.js';
 import { useSelector, useDispatch } from "react-redux";
-
+import { useNavigate } from 'react-router-dom';
 
 
 
 function Profiles({img}) {
+  const navigate = useNavigate();
     const dispatch = useDispatch();
     
    function logoutUser() {
@@ -48,7 +49,7 @@ function Profiles({img}) {
             aria-expanded={open ? 'true' : undefined}
           >
             {/* <Avatar sx={{ width: 32, height: 32 }}>M</Avatar> */}
-            <Avatar alt=" Image" src={img} />
+            <Avatar alt="User Image" src={img}  />
           </IconButton>
         </Tooltip>
       </Box>
@@ -87,24 +88,17 @@ function Profiles({img}) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
+        <MenuItem onClick={()=>{navigate("/profile")}}>
         <Avatar alt=" Image" src={img} /> Profile
         </MenuItem>
-        <MenuItem>
-          <Avatar /> My account
-        </MenuItem>
+       
         <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem>
+        
+        <MenuItem onClick={()=>{navigate("/password/update")}}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+Update password
         </MenuItem>
         <MenuItem onClick={()=>{logoutUser()}}>
           <ListItemIcon>

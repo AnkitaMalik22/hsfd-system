@@ -35,7 +35,7 @@ import Grid from '@mui/material/Grid';
 
 import Chip from '@mui/material/Chip';
 import{newFoodRequest} from "../../../actions/foodAction.js";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector } from "react-redux";
 import { useSnackbar } from 'notistack';
 import Icon from '@mui/material/Icon';
 
@@ -97,7 +97,8 @@ export default function CardFood({food}) {
   })
   const img =food.image[0] ? food.image[0].url :"";
   const [status, setStatus] = React.useState(false)
-  // const navigate=useNavigate();
+  const { error,success } = useSelector((state) => state.newFoodRequest);
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -110,11 +111,12 @@ export default function CardFood({food}) {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleClickVariant = (variant) => () => {
-    // variant could be success, error, warning, info, or default
-    enqueueSnackbar('Successfully Marked as picked!', { variant });
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
   };
-  
+
 
 const {comment}=foodReq;
 
@@ -127,8 +129,13 @@ const foodRequestSubmit = (e) => {
     myForm.set("foodId", foodId);
   
     dispatch(newFoodRequest(myForm));
-    handleClickVariant('success')
-    alert("successfully requested")
+
+    if (error) {
+      showSnackbar("error",error)
+    }
+    if (success) {
+          showSnackbar('success','Requested Successfully!')
+        }
   
   };
   const foodReqDataChange = (e) => {
@@ -354,7 +361,6 @@ foodDesc.requests.length<=0 ? <Chip  color="primary" label="No Requests Yet!" />
           }
         />
          <Chip  color="secondary" variant={request.status ? "contained" : 'outlined'} label={request.status ? "accepted" : "Not Accepted"}
-         onClick={()=>{request.status ? alert("accepted")  :  alert("Not Accepted")  }}
           />
       </ListItem>
       

@@ -9,8 +9,13 @@ import MetaData from "../layouts/MetaData.js";
 import LockOpen from "@mui/icons-material/LockOpen";
 import Lock from "@mui/icons-material/Lock";
 import VpnKey from "@mui/icons-material/VpnKey";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from 'notistack';
 
-const UpdatePassword = ({ history }) => {
+
+const UpdatePassword = () => {
+
+  const navigate=useNavigate()
   const dispatch = useDispatch();
   // const alert = useAlert();
 
@@ -32,22 +37,35 @@ const UpdatePassword = ({ history }) => {
     dispatch(updatePassword(myForm));
   };
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
+
+
+
   useEffect(() => {
     if (error) {
-      // alert.error(error);
+      showSnackbar("error",error)
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
       // alert.success("Profile Updated Successfully");
 
-      history.push("/account");
+     showSnackbar("success","Pasword Updated Successfully");
+     setTimeout(() => {
+      navigate("/profile");
+     }, 2000);
 
       dispatch({
         type: UPDATE_PASSWORD_RESET,
       });
     }
-  }, [dispatch, error, history, isUpdated]);
+  }, [dispatch, error, navigate, isUpdated]);
 
   return (
     <Fragment>
@@ -58,7 +76,7 @@ const UpdatePassword = ({ history }) => {
           <MetaData title="Change Password" />
           <div className="updatePasswordContainer">
             <div className="updatePasswordBox">
-              <h2 className="updatePasswordHeading">Update Profile</h2>
+              <h2 className="updatePasswordHeading">Update Password</h2>
 
               <form
                 className="updatePasswordForm"

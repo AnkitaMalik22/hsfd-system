@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, forgotPassword } from "../../actions/userActions.js";
 // import { useAlert } from "react-alert";
 import MetaData from "../layouts/MetaData.js";
+import { useSnackbar } from 'notistack';
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,13 @@ const ForgotPassword = () => {
   );
 
 const [email, setEmail] = useState("");
+const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
   const forgotPasswordSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +36,7 @@ const [email, setEmail] = useState("");
 
   useEffect(() => {
     if (error) {
-      // alert.error(error);
+      showSnackbar("error",error)
       dispatch(clearErrors());
     }
 

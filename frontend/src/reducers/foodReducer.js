@@ -147,7 +147,7 @@ import {
         return {
           ...state,
           loading: false,
-          error: action.payload,
+          errorDel: action.payload,
         };
       case DELETE_FOOD_RESET:
         return {
@@ -162,7 +162,7 @@ import {
       case CLEAR_ERRORS:
         return {
           ...state,
-          error: null,
+          errorDel: null,
         };
       default:
         return state;
@@ -270,13 +270,13 @@ import {
         return {
           ...state,
           loading: false,
-          isDeleted: action.payload,
+          isAccepted: action.payload,
         };
       case ACCEPT_COMMENT_FAIL:
         return {
           ...state,
           loading: false,
-          error: action.payload,
+          errorAccept: action.payload,
         };
       case ACCEPT_COMMENT_RESET:
         return {
@@ -286,7 +286,7 @@ import {
       case CLEAR_ERRORS:
         return {
           ...state,
-          error: null,
+          errorAccept: null,
         };
       default:
         return state;
@@ -303,7 +303,7 @@ import {
         return {
           ...state,
           loading: false,
-          isDeleted: action.payload,
+          errorPicked: action.payload,
         };
       case FOOD_PICKED_FAIL:
         return {
@@ -314,12 +314,12 @@ import {
       case  FOOD_PICKED_RESET:
         return {
           ...state,
-          isAccepted: false,
+          isPicked: false,
         };
       case CLEAR_ERRORS:
         return {
           ...state,
-          error: null,
+          errorPicked: null,
         };
       default:
         return state;

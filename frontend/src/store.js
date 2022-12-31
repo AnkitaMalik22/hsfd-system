@@ -12,7 +12,8 @@ import {
   markPickedFoodReducer,
   foodsOfThisMonthReducer,
   totalFoodsReducer,
-  totalAcceptOfVolReducer
+  totalAcceptOfVolReducer,
+  totalfoodRequestVolReducer
 } from "./reducers/foodReducer";
 
 import {
@@ -24,7 +25,7 @@ import {
   userDetailsReducer,
   userReducer,
 } from "./reducers/userReducer";
-import { totalFoodRequestOfVol } from "./actions/foodAction";
+
 
 // import { cartReducer } from "./reducers/cartReducer";
 // import {
@@ -60,7 +61,7 @@ const reducer = combineReducers({
   acceptedFoods : totalAcceptOfVolReducer,
   hotels  : allHotelsReducer,
  volunteers: allVolunteersReducer,
- totalRequestsVol :totalFoodRequestOfVol
+ totalRequestsVol : totalfoodRequestVolReducer
 });
 
 let initialState = {

@@ -3,7 +3,7 @@ import "./ResetPassword.css";
 import Loader from "../layouts/Loader/Loader.js";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, resetPassword } from "../../actions/userActions.js";
-// import { useAlert } from "react-alert";
+import { useSnackbar } from 'notistack';
 import MetaData from "../layouts/MetaData.js";
 import LockOpen from "@mui/icons-material/LockOpen";
 import Lock from "@mui/icons-material/Lock";
@@ -19,6 +19,14 @@ const ResetPassword = ({ history, match }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
+
   const resetPasswordSubmit = (e) => {
     e.preventDefault();
 
@@ -32,11 +40,11 @@ const ResetPassword = ({ history, match }) => {
 
   useEffect(() => {
     if (error) {
-      // alert.error(error);
-      dispatch(clearErrors());
+      showSnackbar("error",error)
     }
 
     if (success) {
+      showSnackbar("success","Password Updated Successfully!")
       // alert.success("Password Updated Successfully");
 
       history.push("/login");
@@ -52,7 +60,7 @@ const ResetPassword = ({ history, match }) => {
           <MetaData title="Change Password" />
           <div className="resetPasswordContainer">
             <div className="resetPasswordBox">
-              <h2 className="resetPasswordHeading">Update Profile</h2>
+              <h2 className="resetPasswordHeading">Reset Password</h2>
 
               <form
                 className="resetPasswordForm"

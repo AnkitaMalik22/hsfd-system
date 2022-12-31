@@ -9,12 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, login, register } from "../../actions/userActions.js";
 // import { useAlert } from "react-alert";/
 import {useNavigate } from "react-router-dom";
-import { LocalHotel, LocationCity, Place, VerifiedUser } from "@mui/icons-material";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
+import {  VerifiedUser } from "@mui/icons-material";
+
+import { useSnackbar } from 'notistack';
+import MetaData from "../layouts/MetaData";
 
 
 const LoginSignUp = ({ history, location }) => {
@@ -34,31 +32,13 @@ const LoginSignUp = ({ history, location }) => {
   const [loginPassword, setLoginPassword] = useState("");
 
  
-  // const [open, setOpen] = React.useState();
-  // const [open1, setOpen1] = React.useState();
-  // const [open2, setOpen2] = React.useState();
+  const { enqueueSnackbar } = useSnackbar();
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
-
-  // const handleOpen = () => {
-  //   setOpen(true);
-  // };
-  // const handleClose1 = () => {
-  //   setOpen1(false);
-  // };
-
-  // const handleOpen1 = () => {
-  //   setOpen1(true);
-  // };
-  // const handleClose2 = () => {
-  //   setOpen2(false);
-  // };
-
-  // const handleOpen2 = () => {
-  //   setOpen2(true);
-  // };
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
 
   const [user, setUser] = useState({
@@ -102,6 +82,13 @@ const LoginSignUp = ({ history, location }) => {
     myForm.set("district",district);
 
     dispatch(register(myForm));
+    if (error) {
+      showSnackbar("error",error)
+    }
+    if (isAuthenticated) {
+      showSnackbar("success",'registered successfully!')
+    }
+
   };
 
   const registerDataChange = (e) => {
@@ -162,6 +149,7 @@ const LoginSignUp = ({ history, location }) => {
         <Loader />
       ) : (
         <Fragment>
+             <MetaData title="Login SignUp" />
           <div className="LoginSignUpContainer">
             <div className="LoginSignUpBox">
               <div>

@@ -18,7 +18,7 @@ import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
 import TimerIcon from '@mui/icons-material/Timer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
-import { BrowseGallery, Dashboard, History,Share,LocationCity, DoneAll, Done } from '@mui/icons-material';
+import { BrowseGallery, Dashboard, History,Share,LocationCity, DoneAll, Done, Hotel, FoodBank, FoodBankOutlined } from '@mui/icons-material';
 import { useState } from 'react';
 const categories = [
  
@@ -26,16 +26,16 @@ const categories = [
       
       id: 'Home',
       children: [
-        {  id: 'Home', icon: <PeopleIcon />, page: 'home' },
-      {  id: 'Hotels', icon: <PeopleIcon />, page: 'hotels' },
+        {  id: 'Home', icon: <HomeIcon />, page: 'home' },
+      {  id: 'Hotels', icon: <Hotel />, page: 'hotels' },
       { id: 'Dashboard', icon: <Dashboard /> ,page: 'volunteer/dashboard'},
-      { id: 'Foods', icon: <Dashboard /> ,page: 'volunteer/foods'},
-      {id:' Request Food' , icon:<Dashboard/>, page:'request'},
+      { id: 'Foods', icon: <FoodBank /> ,page: 'volunteer/foods'},
+      {id:' Request Food' , icon:<FoodBankOutlined/>, page:'request'},
     
     ],
     },
     {
-      id: 'Guidelines',
+      id: 'Inbox',
       children: [
         {id:'Requests' , icon:<TimerIcon/>,page:'requests/my'},
         {id:' Accepted Requests' , icon:<Done/>,page:'requests/accepted'},
@@ -104,7 +104,7 @@ export default function Nav(props) {
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-          HSFD System
+        <i className="fas fa-utensils"></i> <h3 style={{marginLeft:'4px'}}>hsfd</h3>
         </ListItem>
         <ListItem sx={{ ...item, ...itemCategory }}>
           <ListItemIcon>

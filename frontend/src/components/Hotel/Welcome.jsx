@@ -1,28 +1,31 @@
-import { Avatar, Grid, Paper, Typography } from '@mui/material'
-import React from 'react'
-import Title from './Dashboard/Title'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import store from "../../store.js";
+import { loadUser } from "../../actions/userActions";
 import './Welcome.css'
 import Paperbase from './MUI/Paperbase'
+import MetaData from "../layouts/MetaData.js";
 
 
-const Index=()=>{
+const Welcome = () => {
+
+
+  const dispatch = useDispatch();
+  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
   return(
     <>
-  <div className="hero">
+    <MetaData title={`Home`} />
+      <Paperbase user={user} children={<div className="hero">
   <div className="overlay"></div>
   <div className="content">
-    <h1>WELCOME TO HSFD.</h1>
-    <p>Hotel Surplus Food Distribution</p>
+    <h1>HOTEL SURPLUS FOOD DISTRIBUTION</h1>
+    <p>Reducing food waste, feeding the hungry, and building community.</p>
   </div>
-</div>
-    </>
-  )
-}
-
-const Welcome = ({user,isAuthenticated}) => {
-  return (
-    <>
-   { isAuthenticated && <Paperbase user={user} children={<Index/>}/>}
+</div>}/>
 </>
 )
 }

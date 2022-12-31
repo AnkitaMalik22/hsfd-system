@@ -1,17 +1,29 @@
 import React, { Fragment, useState, useEffect } from "react";
 import "./UpdateProfile.css";
-import Loader from "../layout/Loader/Loader.js";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import FaceIcon from "@material-ui/icons/Face";
+import Loader from "../layouts/Loader/Loader.js";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import FaceIcon from "@mui/icons-material/Face";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, updateProfile, loadUser } from "../../actions/userAction.js";
-import { useAlert } from "react-alert";
+import { clearErrors, updateProfile, loadUser } from "../../actions/userActions.js";
+import { useSnackbar } from 'notistack';
 import { UPDATE_PROFILE_RESET } from "../../constants/userConstants.js";
-import MetaData from "../layout/MetaData.js";
+import MetaData from "../layouts/MetaData.js";
+import store from "../../store.js";
+import { useNavigate } from "react-router-dom";
+
 
 const UpdateProfile = ({ history }) => {
+  const navigate=useNavigate()
   const dispatch = useDispatch();
-  const alert = useAlert();
+
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
   const { user } = useSelector((state) => state.user);
   const { error, isUpdated, loading } = useSelector((state) => state.profile);
@@ -45,6 +57,13 @@ const UpdateProfile = ({ history }) => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+
+  useEffect(() => {
+   
+    store.dispatch(loadUser())
+   
+  }, []);
+
   useEffect(() => {
     if (user) {
       setName(user.name);
@@ -53,21 +72,25 @@ const UpdateProfile = ({ history }) => {
     }
 
     if (error) {
-      alert.error(error);
+      showSnackbar("error",error)
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
-      alert.success("Profile Updated Successfully");
+      // alert.success("Profile Updated Successfully");
+      showSnackbar("success","Profile Updated Successfully");
       dispatch(loadUser());
 
-      history.push("/account");
+      navigate("/profile");
 
       dispatch({
         type: UPDATE_PROFILE_RESET,
       });
     }
-  }, [dispatch, error, alert, history, user, isUpdated]);
+  }, [dispatch, error, history, user, isUpdated]);
+  // [dispatch, error,alert , history, user, isUpdated]);
+  
+
   return (
     <Fragment>
       {loading ? (

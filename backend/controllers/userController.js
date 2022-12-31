@@ -26,17 +26,7 @@ exports.registerUser=catchAsyncErrors(async(req,res,next)=>{
       });
     
     const {role,name,email,password,country,state,district}=req.body;
-    console.log({
-        role,
-        name,
-        email,
-        password,
-  country,state,district,
-            avatar: {
-                public_id: myCloud.public_id,
-                url: myCloud.secure_url,
-            },
-        })
+   
     const user= await User.create({
         role,
         name,
@@ -228,7 +218,7 @@ exports.updateProfile = catchAsyncErrors(async(req,res,next)=>{
 exports.getAllVolunteers = catchAsyncErrors(async(req,res,next)=>{
 
     const volunteers = await User.find({role : "volunteer"});
-    console.log(volunteers)
+    // console.log(volunteers)
 
     res.status(200).json({
         success:true,

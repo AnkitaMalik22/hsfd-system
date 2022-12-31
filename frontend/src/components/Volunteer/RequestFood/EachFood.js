@@ -1,43 +1,59 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import { useParams } from 'react-router-dom'
 import { getFoodDetails } from '../../../actions/foodAction.js';
 // import CardFood from '../Card';
 import VolHome from '../MUI/VolHome.js'
 import { useSelector, useDispatch } from "react-redux";
 import Food from './Food.js';
-import '../../../store.js'
+import store from "../../../store.js";
+import { loadUser,clearErrors } from "../../../actions/userActions";
+import { useSnackbar } from 'notistack';
+import MetaData from "../../layouts/MetaData.js";
 
 
-
-const EachFood = ({user}) => {
+const EachFood = () => {
 
   const dispatch = useDispatch();
-const{food}=useSelector((state)=>state.foodDetails)
-    const id = useParams();
-const [foodDesc,setFood]=React.useState({id:"",
-  name : "foodDetails.food.name",
-  quantity :"",
-  description:"",
-  category:"",
-  requests:[],
-  image:[{url:""}],
-  picked:false,
-  createdAt :"",
-  owner :"",
-  numOfRequests :0,})
+  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+
+  const{food,error}=useSelector((state)=>state.foodDetails)
+  const id = useParams();
+    const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
 
-  React.useEffect(() => {
-       
-  
+
+ useEffect(() => {
+    store.dispatch(loadUser())
    
-     dispatch(getFoodDetails(id.id));
-     console.log(food);
-     food ? setFood(food) : setFood(foodDesc)    
-      }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      showSnackbar("error",error)
+      dispatch(clearErrors());
+    }
+  }, [error]);
+
+  
+  useEffect(() => {
+   
+  
+    if (food) {
+      dispatch(getFoodDetails(id.id));
+    }
+  }, [dispatch, food]);
+  
     
   return (
 <>
+<MetaData title="Food" />
+
 <VolHome user={user} children={<Food food={food} />} />
 
 </>

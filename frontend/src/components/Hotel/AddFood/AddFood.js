@@ -1,5 +1,5 @@
 
-import React, { Fragment,  useState, useEffect } from "react";
+import React, { Fragment,  useState, useEffect ,useLayoutEffect} from "react";
 import Loader from "../../layouts/Loader/Loader.js";
 import {useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import './AddFood.css'
 import { Category, FoodBank, FoodBankOutlined, HotelOutlined,EventAvailable } from "@mui/icons-material";
 import store from '../../../store.js'
 import { loadUser } from "../../../actions/userActions.js";
+import MetaData from "../../layouts/MetaData.js";
 
 
 
@@ -30,37 +31,61 @@ const AddFood = () => {
     category:""
    
   });
+  const { name, description,quantity,category } = addFood;
+  const [image, setImage] = useState("/images/FoodPreview.png");
+
+  const [place ,setPlace] = useState({
+   owner:``,
+    country:``,
+    state:``,
+    district:``,
+
+})
+const {owner,country,district,state}=place;
+  // const [category ,setCategory]= useState("")
+  // const images=[];
+  const [imagePreview, setImagePreview] = useState("/images/FoodPreview.png");
+
+
   useEffect(() => {
     store.dispatch(loadUser());
+  }, [])
+  useLayoutEffect(() => {
+    setPlace({
+      owner: user && user._id ? `${user._id}` : '',
+      country: user && user.country ? `${user.country}` : '',
+      state: user && user.state ? `${user.state}` : '',
+      district: user && user.district ? `${user.district}` : '',
+    });
+
+  }, [isAuthenticated])
+
+  useEffect(() => {
+
     if (error) {
-     console.error(error);
-     
-      alert(error);
+      showSnackbar("error",error)
       dispatch(clearErrors());
     }
   
  
     if (success) {
-      // history.push(redirect);
-      console.log("success")
-
-    //  navigate("/foods");
+    
+      showSnackbar("success","Food Added Successfully");
+     setAddFood({
+        name:"",
+        description: "",
+        quantity: "",
+        category:""
+       
+      });
+      setImage("/images/FoodPreview.png");
     }
-  }, []);
+  }, [dispatch,error,success]);
 
-  const { name, description,quantity,category } = addFood;
-  const [image, setImage] = useState("/Profile.png");
-  const [owner ,setOwner] = useState(``)
-  const [country, setCountry] = useState(``)
-  const [state, setState] = useState(``)
-  const [district, setDistrict] = useState(``)
-  // const [category ,setCategory]= useState("")
-  // const images=[];
-  const [imagePreview, setImagePreview] = useState("/Profile.png");
-
-  const handleClickVariant = (variant) => () => {
-    // variant could be success, error, warning, info, or default
-    enqueueSnackbar('Successfully food Added!', { variant });
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
   };
 
 
@@ -69,10 +94,10 @@ const AddFood = () => {
   const foodSubmit = (e) => {
     e.preventDefault();
 
-    user &&  setCountry(`${user.country}`)
-    user &&  setState(`${user.state}`)
-    user &&  setDistrict(`${user.district}`)
-    user &&  setOwner(`${user._id}`) 
+    // user &&  setCountry(`${user.country}`)
+    // user &&  setState(`${user.state}`)
+    // user &&  setDistrict(`${user.district}`)
+    // user &&  setOwner(`${user._id}`) 
 
     const myForm = new FormData();
     // const blob = new Blob([image], {type : 'text/xml'});
@@ -86,11 +111,11 @@ const AddFood = () => {
     myForm.set("country",country);
     myForm.set("state",state);
     myForm.set("district",district);
-console.log(name,description,category,owner,state,country,district,quantity)
+// console.log(name,description,category,owner,state,country,district,quantity)
     
     dispatch(createFood(myForm));
     // handleClickVariant('success')
-    alert("successfully added food")
+   
   
   };
 
@@ -111,10 +136,10 @@ console.log(name,description,category,owner,state,country,district,quantity)
     } 
     console.log("quantity" ,quantity)
     console.log("category" ,category)
-    user &&  setCountry(`${user.country}`)
-    user &&  setState(`${user.state}`)
-    user &&  setDistrict(`${user.district}`)
-    user &&  setOwner(`${user._id}`) 
+    // user &&  setCountry(`${user.country}`)
+    // user &&  setState(`${user.state}`)
+    // user &&  setDistrict(`${user.district}`)
+    // user &&  setOwner(`${user._id}`) 
      
       setAddFood({ ...addFood, [e.target.name]: e.target.value });
     
@@ -134,7 +159,7 @@ console.log(name,description,category,owner,state,country,district,quantity)
         <Loader />
       ) : (
         <Fragment>
-  {/* <h6 className="CreateFoodBox__header__title">Create Food</h6> */}
+   <MetaData title="Add Food" />
 
           <div className="CreateFoodContainer">  
           
@@ -174,15 +199,7 @@ console.log(name,description,category,owner,state,country,district,quantity)
               
                 <div className="foodCategory">
                   <Category/>
-                  {/* < Face /> */}
-                  {/* <input
-                    type="text"
-                    placeholder="Category"
-                    required
-                    name="category"
-                    value={category}
-                    onChange={foodDataChange}
-                  /> */}
+              
                   <select
                    type="text"
                    placeholder="Category"
@@ -193,7 +210,7 @@ console.log(name,description,category,owner,state,country,district,quantity)
                 >
 
 
-<option value='' >None</option>
+<option value='' disabled >None</option>
           <option value='Fast food'>Fast food</option>
           <option value='Bengali Food'>Bengali Food</option>
           <option value='Chinese'>Chinese Food</option>

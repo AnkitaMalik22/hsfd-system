@@ -25,7 +25,7 @@ import Grid from '@mui/material/Grid';
 
 import Chip from '@mui/material/Chip';
 import{newFoodRequest} from "../../../actions/foodAction.js";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,16 +44,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+
 
 
 const Food = ({food}) => {
@@ -63,34 +54,37 @@ const Food = ({food}) => {
   
     // const [comment, setComment] = useState("");
     const [foodId ,setFoodId] = useState(`${food._id}`)
+
     const [foodReq,setFoodReq] = useState({
       comment : ""
     })
   
     const [open, setOpen] = React.useState(true);
-    const [foodDesc,setFoodDes]=React.useState({
-      id:food._id,
-      name : food.name,
-      quantity :food.Quantity,
-      description:food.description,
-      category:food.category,
-      requests:food.requests,
-      picked:food.picked,
-      createdAt :food.createdAt,
-      owner :food.owner,
-      numOfRequests :food.numOfRequests,
+    const { error,success } = useSelector((state) => state.newFoodRequest);
 
-    })
+    
     const img = food && food.image && food.image[0] ? food.image[0].url :"" ;
-    // const [status, setStatus] = React.useState(false)
-    // const navigate=useNavigate();
+
    
   
-    const handleClickVariant = (variant) => () => {
-      // variant could be success, error, warning, info, or default
-      enqueueSnackbar('Successfully Marked as picked!', { variant });
+  
+    const showSnackbar = (type,message) => {
+      enqueueSnackbar(message, {
+        variant: type,
+      });
     };
-    
+  
+  // React.useEffect(() => {
+  //   if (error) {
+  //     showSnackbar("error",error)
+  //   }
+  // },[error])
+
+  // React.useEffect(() => {
+  //   if (success) {
+  //     showSnackbar('success','Requested Successfully!')
+  //   }
+  // },[success])
   
   const {comment}=foodReq;
   
@@ -103,9 +97,12 @@ const Food = ({food}) => {
       myForm.set("foodId", foodId);
     
       dispatch(newFoodRequest(myForm));
-      handleClickVariant('success')
-      alert("successfully requested")
-    
+      if (error) {
+        showSnackbar("error",error)
+      }
+      if (success) {
+            showSnackbar('success','Requested Successfully!')
+          }
     };
     const foodReqDataChange = (e) => {
     
@@ -169,17 +166,17 @@ const Food = ({food}) => {
         <Grid container alignItems="center">
           <Grid item xs>
             <Typography gutterBottom variant="h4">
-           { foodDesc.name}
+           { food.name}
             </Typography>
           </Grid>
           <Grid item>
             <Typography gutterBottom variant="h6">
-          { foodDesc.quantity}
+          { food.quantity}
             </Typography>
           </Grid>
         </Grid>
         <Typography color="textSecondary" variant="body2">
-      { foodDesc.description}
+      { food.description}
         </Typography>
       </div>
       <Divider variant="middle" sx={{my:2}} />
@@ -187,13 +184,23 @@ const Food = ({food}) => {
       
         <div>
         {
-foodDesc && foodDesc.requests && foodDesc.requests.length<=0 ? <Chip  color="primary" label="No Requests Yet!" /> :<Chip  color="primary" label={`Requested by - ${ foodDesc.requests && foodDesc.requests.length == 0 ? 0 : foodDesc.requests.length} volunteers ` } />  
-  }
+  food && food.requests ? (
+    food.requests.length === 0 ? (
+      <Chip color="primary" label="No Requests Yet!" />
+    ) : (
+      <Chip
+        color="primary"
+        label={`Requested by - ${food.requests.length} volunteers`}
+      />
+    )
+  ) : null
+}
+
   
 
 <List sx={{ width: '100%',
     maxWidth: '36ch',}}>
- {foodDesc.numOfRequests >0 && foodDesc.requests.map((request) => (
+ {food.numOfRequests >0 && food.requests.map((request) => (
 
      <React.Fragment>
       {/* key={request.id} */}
@@ -219,7 +226,6 @@ foodDesc && foodDesc.requests && foodDesc.requests.length<=0 ? <Chip  color="pri
           }
         />
          <Chip  color="secondary" variant={request.status ? "contained" : 'outlined'} label={request.status ? "accepted" : "Not Accepted"}
-         onClick={()=>{request.status ? alert("accepted")  :  alert("Not Accepted")  }}
           />
       </ListItem>
       
@@ -281,7 +287,7 @@ foodDesc && foodDesc.requests && foodDesc.requests.length<=0 ? <Chip  color="pri
                 sx={{display: 'inline'}}
                 color="textSecondary"
               >
-              Added at :  {foodDesc.createdAt}
+              Added at :  {food.createdAt}
               </Typography>
               <Divider variant="middle" sx={{my:2}} />
       <Typography
@@ -290,7 +296,7 @@ foodDesc && foodDesc.requests && foodDesc.requests.length<=0 ? <Chip  color="pri
                 sx={{display: 'inline'}}
                 color="textPrimary"
               >
-             @ {foodDesc.owner}
+             @ {food.owner}
               </Typography>
     </Paper>
 

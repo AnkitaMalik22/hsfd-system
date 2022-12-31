@@ -14,15 +14,23 @@ import Title from '../../Hotel/Dashboard/Title.js';
 import { getAllHotels } from "../../../actions/userActions.js";
 import VolHome from "../MUI/VolHome";
 import { ListItem, Paper } from "@mui/material";
-
+import store from "../../../store.js";
+import { loadUser } from "../../../actions/userActions";
+import MetaData from "../../layouts/MetaData.js";
 
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function Hotels({user}) {
+export default function Hotels() {
   const dispatch = useDispatch();
+ 
+  const {isAuthenticated, user} = useSelector((state) => state.user);
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
   // const alert = useAlert();
   const {
  hotels,
@@ -41,6 +49,8 @@ export default function Hotels({user}) {
 
   return (
    <>
+   <MetaData title="Hotels" />
+
    <VolHome user={user} children={ <React.Fragment>
     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
       <Title>Registered hotels</Title>

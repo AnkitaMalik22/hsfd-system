@@ -2,32 +2,51 @@ import { Paper,Typography } from "@mui/material";
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
+import store from "../../../store.js";
+import { loadUser,clearErrors } from "../../../actions/userActions";
 import {
   totalFoodsOfHotel
   } from "../../../actions/foodAction.js";
 import Loader from "../../layouts/Loader/Loader.js";
 import MetaData from "../../layouts/MetaData.js";
-
-// import Typography from '@mui/material/Typography';
-// import Paper from '@mui/material/Paper';
-
 import  CardFood from "../Card.js";
+import { useSnackbar } from 'notistack';
 
 
-
-export default function Foods({user}) {
+export default function Foods() {
 
   const dispatch = useDispatch();
   // const alert = useAlert();
-  const { totalFoods,loading} = useSelector((state) => state.totalFoods);
-  useSelector((state) =>console.log( state.totalFoods));
+  const { totalFoods,loading,error} = useSelector((state) => state.totalFoods);
+  const {isAuthenticated, user} = useSelector((state) => state.user);
+  const [userId,setUserId]=useState('')
+  const { enqueueSnackbar } = useSnackbar();
 
-React.useEffect(() => {
-  // store.dispatch(loadUser())
-user && dispatch(totalFoodsOfHotel(user._id))
-   console.log(totalFoods)
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
-  }, [dispatch]);
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
+ 
+  useEffect(() => {
+    if (error) {
+      showSnackbar("error",error)
+      dispatch(clearErrors());
+    }
+  }, [error]);
+
+  React.useLayoutEffect(() => {
+    user && user._id ? setUserId(  `${user._id}` ) : setUserId('');
+
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    dispatch(totalFoodsOfHotel(userId));
+  }, [dispatch, userId]);
 
 
   // const [showAddFood,setShowAddFood] = React.useState(false);
@@ -48,11 +67,11 @@ user && dispatch(totalFoodsOfHotel(user._id))
       
   </Fragment>
 )} 
-<Paper sx={{ overflow: 'hidden',border:'1px solid #e3f2fd' ,marginBottom:"1rem" }}>
+{totalFoods && totalFoods.length ==0 && <Paper sx={{ overflow: 'hidden',border:'1px solid #e3f2fd' ,marginBottom:"1rem" }}>
  <Typography variant="body2" color="text.secondary">
        No Foods!
         </Typography>
-</Paper>
+</Paper>}
 </Fragment>
   )
 }

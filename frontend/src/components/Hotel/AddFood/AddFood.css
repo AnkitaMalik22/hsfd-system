@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
    
-    background-color: rgb(231, 231, 231);
+    /* background-color: rgb(231, 231, 231); */
 
     
   }
@@ -15,7 +15,7 @@
    
     background-color: white;
     width: 45vw;
-    height: 75vh;
+   
     box-sizing: border-box;
     border:2px solid tomato;
     overflow: hidden;
@@ -49,7 +49,21 @@
     }
   
 
-    .CreateFoodForm > div > input , .CreateFoodForm > div > select {
+    .CreateFoodForm > div > select {
+      padding: 1vmax 4vmax;
+      padding-right: 1vmax;
+      margin : 1rem 0 ;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.267);
+      border-radius: 4px;
+      font: 300 0.9vmax cursive;
+      outline: none;
+    }
+    .CreateFoodForm > div > select:focus{
+      border: 1px solid tomato;
+  }
+    .CreateFoodForm > div > input {
       padding: 2vmax 4vmax;
   padding-right: 1vmax;
   width: 100%;

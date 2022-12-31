@@ -116,13 +116,13 @@ function Header(props) {
               </Tooltip>
             </Grid>
             <Grid item>
-              <IconButton color="inherit" sx={{ p: 0.5 }}>
+              {/* <IconButton color="inherit" sx={{ p: 0.5 }}> */}
       
 
                 {/* <Avatar  alt="My Avatar" /> */}
                 <Profiles img={img} />
-           
-              </IconButton>
+{/*            
+              </IconButton> */}
             </Grid>
           </Grid>
         </Toolbar>

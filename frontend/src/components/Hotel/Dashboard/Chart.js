@@ -1,13 +1,15 @@
-import * as React from 'react';
+import React, { useEffect } from "react";
 import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './Title.js';
 import { useSelector, useDispatch } from "react-redux";
+import store from "../../../store.js";
+import { loadUser,clearErrors } from "../../../actions/userActions";
 import {
   
   foodsOfThisMonth,
 } from "../../../actions/foodAction.js";
-
+import { useSnackbar } from 'notistack';
 
 
 
@@ -18,18 +20,42 @@ function createData(date, day) {
 
 
 
-export default function Chart({user}) {
+export default function Chart() {
   const dispatch = useDispatch();
   const theme = useTheme();
   // const [food ,setFood] = useState([{date : "" , foodName : ""}])
-  // const { isAuthenticated, user } = useSelector((state) => state.user);
-
+  const {isAuthenticated, user} = useSelector((state) => state.user);
   const {
-foodDetails,
-    loading,
-    error,
+    foodDetails,
+        loading,
+        error,
+    
+      } = useSelector((state) => state.foodsPerMonth);
 
-  } = useSelector((state) => state.foodsPerMonth);
+      const { enqueueSnackbar } = useSnackbar();
+
+      const showSnackbar = (error) => {
+        enqueueSnackbar(error, {
+          variant:'error',
+        });
+      }
+
+      useEffect(() => {
+        store.dispatch(loadUser())
+       
+      }, []);
+    
+  
+  useEffect(() => {
+    if (error) {
+      showSnackbar("error",error)
+      dispatch(clearErrors());
+    }
+   
+  }, [error]);
+
+
+ 
 
 React.useEffect(() => {
   // store.dispatch(loadUser())

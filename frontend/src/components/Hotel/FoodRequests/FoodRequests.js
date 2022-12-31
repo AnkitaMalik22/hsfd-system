@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import Paperbase from '../MUI/Paperbase.js'
 import Req from './Req.js'
+import { useSelector, useDispatch } from "react-redux";
+import store from "../../../store.js";
+import { loadUser } from "../../../actions/userActions";
+import MetaData from "../../layouts/MetaData.js";
 
-const FoodRequests = ({user}) => {
+const FoodRequests = () => {
+  const dispatch = useDispatch();
+  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
   return (
     <>
-   <Paperbase user={user} children={<Req user={user}/>}/> 
+     <MetaData title={`Requests`} />
+   <Paperbase user={user} children={<Req />}/> 
  
     </>
   )

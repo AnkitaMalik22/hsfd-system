@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -34,7 +34,7 @@ import { Comment } from '@mui/icons-material';
 import Grid from '@mui/material/Grid';
 
 import Chip from '@mui/material/Chip';
-import{acceptFoodRequest, markFoodPicked} from "../../actions/foodAction.js";
+import{acceptFoodRequest, markFoodPicked,deleteFood} from "../../actions/foodAction.js";
 import { useDispatch } from "react-redux";
 import { useSnackbar } from 'notistack';
 
@@ -66,6 +66,7 @@ const ExpandMore = styled((props) => {
 
 
 export default function CardFood({food}) {
+
   
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -73,6 +74,7 @@ export default function CardFood({food}) {
   const [expanded, setExpanded] = React.useState(false);
   const [foodOpen , setFoodOpen]=React.useState(false);
   // const [requestId,setRequestId]=React.useState("")
+  
   const [foodDesc,setFoodDes]=React.useState({
     id:food._id,
     name : food.name,
@@ -87,6 +89,8 @@ export default function CardFood({food}) {
   })
   const img =food.image[0] ? food.image[0].url :"";
   const [status, setStatus] = React.useState(false)
+  // const [picked, setPicked] = React.useState(false);
+  // const [accepted , setAccepted]=React.useState(false);
   // const navigate=useNavigate();
 
   const handleExpandClick = () => {
@@ -100,24 +104,49 @@ export default function CardFood({food}) {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleClickVariant = (variant) => () => {
-    // variant could be success, error, warning, info, or default
-    enqueueSnackbar('Successfully Marked as picked!', { variant });
+
+  //-----------------------------------------
+
+ 
+  const showSnackbar = (message,type) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
   };
+
+  // useEffect(() => {
+   
   
+   
+  // }, [picked]);
 
-  const handlePicked = () => {
-    dispatch(markFoodPicked(foodDesc.id))
-    handleClickVariant('success')
+  // useEffect(() => {
+
+   
+  // }, [accepted]);
+    
+  const handleDelete = () => {
+    dispatch(deleteFood(foodDesc.id))
+    showSnackbar("Food Deleted Sucessfully !","success")
   };
+      const handlePicked = () => {
+        dispatch(markFoodPicked(foodDesc.id))
+        showSnackbar("Food Marked As Picked !","success")
+      };
+    
+    
+    function handleAccept(foodId,requestId){
+    // console.log(foodId,requestId);
+    dispatch( acceptFoodRequest({requestId :requestId},foodId)) && setStatus(true)
+     
+    showSnackbar("Request Accepted Successfully !","success")
+    //  food.status == true ? setStatus(true) : setStatus(false)  ;
+    }
 
 
-function handleAccept(foodId,requestId){
-console.log(foodId,requestId);
-  dispatch( acceptFoodRequest({requestId :requestId},foodId)) && setStatus(true)
-  alert("Request Accepted Successfully!")
-//  food.status == true ? setStatus(true) : setStatus(false)  ;
-}
+  //-------------------------------------------
+
+
 
 
 
@@ -347,7 +376,7 @@ foodDesc.requests.length<=0 ? <Chip  color="primary" label="No Requests Yet!" />
         </div>
       </div>
       <div >
-        <Button color="primary">
+        <Button color="primary" onClick={()=>{handleDelete(foodDesc.id)}}>
           <DeleteIcon/>
           Delete Food</Button>
        {

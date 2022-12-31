@@ -37,115 +37,27 @@ export default function FoodsVol() {
 
 })
 
-
- 
-
-
-  // useEffect(() => {
-    // store.dispatch(loadUser());
-    // if (error) {
-      // alert.error(error);
-      // alert(error);
-      // dispatch(clearErrors());
-    // }
-    // handleSetPlace();
-    
-    // setPlace({
   
-    //   country:`${user.country}`,
-    //   state:`${user.state}`,
-    //   district:`${user.district}`,
-    
-    // })
-
-   
-   
-
   useEffect(() => {
-    store.dispatch(loadUser());
-  
-    console.log("loaded1")
-    return () => {
-     
-      dispatch(getFoods(place))
-      console.log("loaded2")
-    }
-  }, [dispatch])
+    store.dispatch(loadUser())
+   
+  }, []);
 
   useLayoutEffect(() => {
     setPlace({
-    
-      country:`${user.country}`,
-      state:`${user.state}`,
-      district:`${user.district}`,
-    
-    }) 
-  console.log("loaded3")
-  }, [user])
+      country: user && user.country ? `${user.country}` : '',
+      state: user && user.state ? `${user.state}` : '',
+      district: user && user.district ? `${user.district}` : '',
+    });
 
-//  async function handleSetPlace(){
-//    await setPlace({
-    
-//       country:`${user.country}`,
-//       state:`${user.state}`,
-//       district:`${user.district}`,
-    
-//     }) 
-//     await dispatch(getFoods(place))
-//     } 
-
-
-//  function loadFoods (){
- 
-// if(isAuthenticated){
-//  setPlace({
-    
-//     country:`${user.country}`,
-//     state:`${user.state}`,
-//     district:`${user.district}`,
+  }, [isAuthenticated])
   
-//   }) 
-//   dispatch(getFoods(place))
-
-
-// }
-
-
-// }
-// async function loadFoods(){
-
-// await  setPlace({
-    
-//   country:`${user.country}`,
-//   state:`${user.state}`,
-//   district:`${user.district}`,
-
-// }) 
-// await dispatch(getFoods(place)) 
-
-//   }
-
-
-
-// await loadFoods()
-
-
-// isAuthenticated ? setPlace({
   
-//   country:`${user.country}`,
-//   state:`${user.state}`,
-//   district:`${user.district}`,
-
-// }) :setPlace({
-  
-//   country:``,
-//   state:``,
-//   district:``,
-
-// })
+  useEffect(() => {
+    dispatch(getFoods(place));
+  }, [place,dispatch]);
 
 
-  // const [showAddFood,setShowAddFood] = React.useState(false);
   return (
     <Fragment>
       
@@ -164,11 +76,11 @@ export default function FoodsVol() {
       
   </Fragment>
 )} 
-<Paper sx={{ overflow: 'hidden',border:'1px solid #e3f2fd',padding:" 1rem  1rem 0 1rem" }}>
-<Typography component="h2" variant="h6" color="primary" gutterBottom>
-       No Foods! 
+{!loading && foods && foods.length == 0 && <Paper sx={{ overflow: 'hidden',border:'1px solid #e3f2fd' ,marginBottom:"1rem" }}>
+ <Typography variant="body2" color="text.secondary">
+       No Foods!
         </Typography>
-</Paper>
+</Paper>}
 </Fragment>
   )
 }

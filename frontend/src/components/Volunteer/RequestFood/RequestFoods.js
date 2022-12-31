@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Fragment, useEffect, useState,useLayoutEffect } from "react";
+
 import {
     clearErrors,
     getFoods,
@@ -13,33 +14,63 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import { Paper } from "@mui/material";
 import Loader from '../../layouts/Loader/Loader';
+import store from "../../../store.js";
+import { loadUser } from "../../../actions/userActions.js";
+import { useSnackbar } from 'notistack';
 
 
+const RequestFoods= () => {
 
 
-const RequestFoods= ({user}) => {
+  const dispatch = useDispatch();
+  const {
+    foods,
+    load,
+    error,
 
+  } = useSelector((state) => state.foods);
+  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
 
-    const dispatch = useDispatch();
-    // const alert = useAlert();
-    const {
-      foods,
-      loading,
-      error,
+  const [place ,setPlace] = useState({
   
-    } = useSelector((state) => state.foods);
+    country:``,
+    state:``,
+    district:``,
+
+})
+const { enqueueSnackbar } = useSnackbar();
+
+const showSnackbar = (type,message) => {
+  enqueueSnackbar(message, {
+    variant: type,
+  });
+};
+  
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
+  useEffect(() => {
+    if (error) {
+      showSnackbar("error",error)
+      dispatch(clearErrors());
+    }
+  },[error])
+
+  useLayoutEffect(() => {
+    setPlace({
+      country: user && user.country ? `${user.country}` : '',
+      state: user && user.state ? `${user.state}` : '',
+      district: user && user.district ? `${user.district}` : '',
+    });
+
+  }, [isAuthenticated])
   
   
-    React.useEffect(() => {
-      if (error) {
-        // alert.error(error);
-        alert(error);
-        dispatch(clearErrors());
-      }
-  
-     dispatch(getFoods());
-  
-    }, [dispatch,error]);
+  useEffect(() => {
+    dispatch(getFoods(place));
+  }, [place,dispatch]);
+
   
 
 
@@ -69,12 +100,15 @@ const RequestFoods= ({user}) => {
   )) 
  }  
    
-<TableRow  >
- <TableCell  component="th" scope="row" >
-  No Food!
- </TableCell>
- <TableCell align="right"></TableCell>
+   {
+
+foods && foods.length == 0 && <TableRow >
+<TableCell  component="th" scope="row" >
+ No requests!
+</TableCell>
+<TableCell align="right"></TableCell>
 </TableRow>
+}
 
    </TableBody> 
      }

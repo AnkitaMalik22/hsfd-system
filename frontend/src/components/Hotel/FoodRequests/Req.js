@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import {
   totalFoodsOfHotel
   } from "../../../actions/foodAction.js";
-import { useSelector, useDispatch } from "react-redux";
+  import { useSelector, useDispatch } from "react-redux";
+  import store from "../../../store.js";
+  import { loadUser,clearErrors } from "../../../actions/userActions";
 import RequestList from './RequestList';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
@@ -11,21 +13,43 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import { Paper } from "@mui/material";
 import Loader from '../../layouts/Loader/Loader.js';
+import { useSnackbar } from 'notistack';
 
-
-const Req= ({user}) => {
+const Req= () => {
   const dispatch = useDispatch();
+  const {isAuthenticated, user} = useSelector((state) => state.user);
+
   // const alert = useAlert();
-  const { totalFoods,loading} = useSelector((state) => state.totalFoods);
+  const { totalFoods,loading,error} = useSelector((state) => state.totalFoods);
   const [count, setCount] = React.useState(false)
+  const [userId,setUserId]=useState('')
+  const { enqueueSnackbar } = useSnackbar();
 
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
-React.useEffect(() => {
-  // store.dispatch(loadUser())
-user && dispatch(totalFoodsOfHotel(user._id))
-   
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
+ 
+  useEffect(() => {
+    if (error) {
+      showSnackbar("error",error)
+      dispatch(clearErrors());
+    }
+  }, [error]);
 
-  }, [dispatch]);
+  React.useLayoutEffect(() => {
+    user && user._id ? setUserId(  `${user._id}` ) : setUserId('');
+
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    dispatch(totalFoodsOfHotel(userId));
+  }, [dispatch, userId]);
 
 
 
@@ -56,13 +80,16 @@ totalFoods &&
   )) 
  }  
    
-   <TableRow sx={{display:count ? "none" : "static"}} >
- <TableCell  component="th" scope="row" >
-  No requests!
- </TableCell>
- <TableCell align="right"></TableCell>
-</TableRow>
+   {
 
+totalFoods &&
+ totalFoods.length == 0 && <TableRow  >
+<TableCell  component="th" scope="row" >
+ No requests!
+</TableCell>
+<TableCell align="right"></TableCell>
+</TableRow>
+}
    </TableBody> 
      }
   </Table>

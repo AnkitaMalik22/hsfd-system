@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -6,11 +6,13 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Chart from './Chart';
-import Deposits from './Deposits.js';
-import Orders from './Orders.js';
+import Donation from '././Donation.js'
+// import Orders from './Orders.js';
 import Req from '../FoodRequests/Req.js';
-
-
+import { useSelector, useDispatch } from "react-redux";
+import store from "../../../store.js";
+import { loadUser } from "../../../actions/userActions";
+import { useSnackbar } from 'notistack';
 
 
 let mdTheme = createTheme({
@@ -51,11 +53,32 @@ let mdTheme = createTheme({
   });
 // const mdTheme = createTheme();
 
-function DashboardContent({user}) {
+export default function Dashboard() {
+  const dispatch = useDispatch();
+  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+ 
+  // const { enqueueSnackbar } = useSnackbar();
+  // const showSnackbar = (message) => {
+  //   enqueueSnackbar(message, {
+  //     variant:'error',
+  //   });
+  // };
 
+ 
+ 
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
+  // React.useLayoutEffect(() => {
+  //   if(!isAuthenticated){
+  //     showSnackbar("Authentication needed to access this page!")
+  //   }
+   
+  // }, [isAuthenticated]);
 
   return (
-    <ThemeProvider theme={mdTheme}>
+ <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
        
@@ -84,7 +107,7 @@ function DashboardContent({user}) {
                     height: 240,
                   }}
                 >
-                  <Chart user={user} />
+                  <Chart  />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
@@ -97,13 +120,13 @@ function DashboardContent({user}) {
                     height: 240,
                   }}
                 >
-                  <Deposits  user={user} />
+                  <Donation  />
                 </Paper>
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
                 {/* <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}> */}
-                  <Req  user={user} />
+                  <Req  />
                 {/* </Paper> */}
               </Grid>
             </Grid>
@@ -115,6 +138,5 @@ function DashboardContent({user}) {
   );
 }
 
-export default function Dashboard({user}) {
-  return <> <DashboardContent user={user} /></>;
-}
+
+

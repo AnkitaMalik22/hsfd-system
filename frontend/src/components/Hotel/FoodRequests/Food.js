@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import { styled } from '@mui/material/styles';
 
 import Avatar from '@mui/material/Avatar';
@@ -20,14 +20,13 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 
 import Slide from '@mui/material/Slide';
-
-
-// import { Comment } from '@mui/icons-material';
+import { useSelector, useDispatch } from "react-redux";
+import store from "../../../store.js";
+import { loadUser } from "../../../actions/userActions";
 import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
-import{acceptFoodRequest, markFoodPicked} from "../../../actions/foodAction.js";
-import { useDispatch } from "react-redux";
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import{acceptFoodRequest, markFoodPicked,deleteFood} from "../../../actions/foodAction.js";
+import { useSnackbar } from 'notistack';
 import { Link } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
 
@@ -56,39 +55,57 @@ const Img = styled('img')({
 
 
 const Food = ({food}) => {
-    const { enqueueSnackbar } = useSnackbar();
+
     const dispatch = useDispatch();
+    const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+   
     const img = food.image && food.image[0] ? food.image[0].url : "";
     const [open, setOpen] = React.useState(true);
-    const [expanded, setExpanded] = React.useState(false);
-    const [foodOpen , setFoodOpen]=React.useState(false);
+    const [picked, setPicked] = React.useState(false);
+    const [accepted , setAccepted]=React.useState(false);
   const [status, setStatus] = React.useState(false)
-    const handleClickVariant = (variant) => () => {
-        // variant could be success, error, warning, info, or default
-        enqueueSnackbar('Successfully Marked as picked!', { variant });
-      };
-      
+
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
+ 
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
+  // useEffect(() => {
+   
+  //       showSnackbar("Food Marked As Picked !","success")
+   
+  // }, [picked]);
+  // useEffect(() => {
+  //   showSnackbar("Request Accepted Successfully !","success")
+   
+  // }, [accepted]);
     
       const handlePicked = () => {
-        dispatch(markFoodPicked(food.id))
-        handleClickVariant('success')
+        dispatch(markFoodPicked(food._id))
+        showSnackbar("Food Marked As Picked !","success")
       };
     
     
     function handleAccept(foodId,requestId){
-    console.log(foodId,requestId);
+    // console.log(foodId,requestId);
       dispatch( acceptFoodRequest({requestId :requestId},foodId)) && setStatus(true)
-      alert("Request Accepted Successfully!")
+     
+      showSnackbar("Request Accepted Successfully !","success")
     //  food.status == true ? setStatus(true) : setStatus(false)  ;
     }
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-      };
-    
-      // const handleClickOpen = () => {
-      //   setOpen(true);
-      // };
-    
+    const handleDelete = () => {
+      dispatch(deleteFood(food._id))
+      showSnackbar("Food Deleted Sucessfully !","success")
+    };
+      
       const handleClose = () => {
         setOpen(false);
       };
@@ -203,8 +220,8 @@ maxWidth: '36ch',}}>
         </React.Fragment>
       }
     />
-     <Chip  color="secondary" variant={request.status ? "contained" : 'outlined'} label={request.status ? "Already Accepted" : "Accept it"}
-     onClick={()=>{request.status ? alert("alreay accepted")  : handleAccept(food.id,request.user)}}
+     <Chip  color="secondary" variant={request.status ? "contained" : 'outlined'} label={request.status ? "Accepted" : "Accept it"}
+     onClick={()=>{request.status ? alert("alreay accepted")  : handleAccept(food._id,request.user)}}
       />
   </ListItem>
   
@@ -217,11 +234,11 @@ maxWidth: '36ch',}}>
     </div>
   </div>
   <div >
-  <Button variant="outlined" startIcon={<DeleteIcon />} sx={{mx:2}}>
-  Delete
-</Button>
+  <Button color="primary" onClick={()=>{handleDelete(food._id)}}>
+          <DeleteIcon/>
+          Delete Food</Button>
    {
-     food.numOfRequests >0 &&  <Chip onClick={()=>food.picked ? alert("already picked!") : handlePicked()} 
+     food.accepted == true &&  <Chip onClick={()=>food.picked ? alert("already picked!") : handlePicked()} 
      disabled= { food.picked  ? true : false  }
 
     variant="contained" label={food.picked ? "Picked" : "Mark as Picked"} />

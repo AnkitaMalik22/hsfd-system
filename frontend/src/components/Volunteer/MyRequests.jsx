@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment, useEffect, useState,useLayoutEffect } from "react";
 import {
     totalFoodRequestOfVol
   } from "../../actions/foodAction.js";
@@ -9,29 +9,58 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import { Paper } from "@mui/material";
-import Loader from '../../layouts/Loader/Loader.js';
+import Loader from '../layouts/Loader/Loader';
+import store from "../../store.js";
+import VolHome from "./MUI/VolHome.js";
+import { loadUser } from "../../actions/userActions.js";
+import { useNavigate ,Link} from "react-router-dom";
+import { useSnackbar } from 'notistack';
+import MetaData from "../layouts/MetaData.js";
 
 
-const MyRequests= ({user}) => {
+const MyRequests= () => {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   // const alert = useAlert();
-  const { totalFoods,loading} = useSelector((state) => state.totalRequestsVol);
+  const {isAuthenticated, user} = useSelector((state) => state.user);
+
+  const {totalFoods,loading,error} = useSelector((state) => state.totalRequestsVol);
   const [count, setCount] = React.useState(false)
+  const { enqueueSnackbar } = useSnackbar();
 
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
-React.useEffect(() => {
-  // store.dispatch(loadUser())
-user && dispatch(totalFoodRequestOfVol(user._id))
-   console.log(totalFoods)
+  useEffect(() => {
+    if (error) {
+      showSnackbar("error",error)
+    }
+  },[error])
+  
+  useEffect(() => {
+    if (user && user._id) {
+      dispatch(totalFoodRequestOfVol(user._id));
+    
+    }
+  }, [dispatch, user]);
+  
+  useEffect(() => {
+    store.dispatch(loadUser());
 
-  }, [dispatch]);
+  }, []);
+  
+  
 
 
 
   return (
 
      <>
- <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+       <MetaData title="Requests" />
+<VolHome user={user} children={ <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
        <Table sx={{minWidth: 700}}>
     <TableHead>
       <TableRow>
@@ -44,34 +73,38 @@ user && dispatch(totalFoodRequestOfVol(user._id))
     </TableHead>
  {  loading ? <TableBody><Loader/></TableBody> :  
     <TableBody>
-{/* {
+{
 totalFoods &&
  totalFoods.map((food) => (
 
-    <TableRow  key={request._id} style={{ cursor: 'pointer' }} onClick={() => navigate(`food/${foodId}`)}>
+    <TableRow  key={food.foodId} style={{ cursor: 'pointer' ,textDecoration:"none"}} >
     <TableCell  component="th" scope="row" >
-      {request.comment}
+      {food.comment}
     </TableCell>
 
-    <TableCell align="right">{request.name}</TableCell>
+    <TableCell align="right"><Link to={`/volunteer/food/${food.foodId}`}>view food</Link></TableCell>
  
 
   </TableRow>
-
+  // </Link>
   )) 
- }   */}
+ }  
    
-   <TableRow sx={{display:count ? "none" : "static"}} >
- <TableCell  component="th" scope="row" >
-  No requests!
- </TableCell>
- <TableCell align="right"></TableCell>
-</TableRow>
+   {
+
+    totalFoods && totalFoods.length == 0 && <TableRow sx={{display:count ? "none" : "static"}} >
+    <TableCell  component="th" scope="row" >
+     No requests!
+    </TableCell>
+    <TableCell align="right"></TableCell>
+   </TableRow>
+   }
 
    </TableBody> 
      }
   </Table>
-  </Paper>
+  </Paper>} />
+
 
      
      </>

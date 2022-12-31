@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -6,10 +6,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Chart from './Chart.js';
-import Deposits from './Deposits.js';
+import Accept from './Accept.js';
 import RequestFoods from '../RequestFood/RequestFoods.js';
-// import Orders from './Orders';
-// import Req from '../FoodRequests/Req';
+import { useSelector, useDispatch } from "react-redux";
+import store from "../../../store.js";
+import { loadUser } from "../../../actions/userActions";
 
 
 
@@ -52,8 +53,13 @@ let mdTheme = createTheme({
   });
 // const mdTheme = createTheme();
 
-function DashboardContent({user}) {
-
+export default function Dashboard() {
+  const dispatch = useDispatch();
+  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -98,7 +104,7 @@ function DashboardContent({user}) {
                     height: 240,
                   }}
                 >
-                  <Deposits  user={user} />
+                  <Accept  user={user} />
                 </Paper>
               </Grid>
               {/* Recent Orders */}
@@ -116,6 +122,4 @@ function DashboardContent({user}) {
   );
 }
 
-export default function Dashboard({user}) {
-  return <> <DashboardContent user={user} /></>;
-}
+

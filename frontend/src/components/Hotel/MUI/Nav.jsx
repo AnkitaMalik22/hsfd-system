@@ -8,17 +8,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
-import PeopleIcon from '@mui/icons-material/People';
+
 import { Link } from 'react-router-dom';
-// import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
-// import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
-import PublicIcon from '@mui/icons-material/Public';
-import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
-// import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
-import TimerIcon from '@mui/icons-material/Timer';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
-import { BrowseGallery, Dashboard, History,Share,LocationCity } from '@mui/icons-material';
+import {  Dashboard, VolunteerActivism, FoodBank, Add, RequestPage, Inbox } from '@mui/icons-material';
 import { useState } from 'react';
 const categories = [
  
@@ -26,50 +18,18 @@ const categories = [
       
       id: 'Home',
       children: [
-        {  id: 'Home', icon: <PeopleIcon />, page: 'home' },
-      {  id: 'Volunteers', icon: <PeopleIcon />, page: 'volunteers' },
+        {  id: 'Home', icon: <HomeIcon />, page: 'home' },
+      {  id: 'Volunteers', icon: <VolunteerActivism />, page: 'volunteers' },
       { id: 'Dashboard', icon: <Dashboard /> ,page: 'dashboard'},
-      { id: 'Foods', icon: <Dashboard /> ,page: 'foods'},
-      {id:'Add Food' , icon:<Dashboard/>,page:'add/food'},
-      {id:'Requests' , icon:<Dashboard/>,page:'requests'}
+      { id: 'Foods', icon: <FoodBank/> ,page: 'foods'},
+      {id:'Add Food' , icon:<Add/>,page:'add/food'},
+      {id:'Requests' , icon:<Inbox/>,page:'requests'}
     ],
     }
     
  
 ];
 
-// const categories = [
-//   {
-//     id: 'Hotel',
-//     children: [
-//       {
-//         id: 'Volunteers',
-//         icon: <PeopleIcon />,
-//         active: true,
-//       },
-//       { id: 'Dashboard', icon: <Dashboard /> },
-//       { id: 'History', icon: <History /> },
-//       { id: 'Gallery', icon: <BrowseGallery /> },
-//       { id: 'Settings', icon: <SettingsEthernetIcon /> },
-//       {
-//         id: 'Blogs',
-//         icon: <Share />,
-//       },
-//       {
-//         id: 'Loaction',
-//         icon: <LocationCity />,
-//       },
-//     ],
-//   },
-//   {
-//     id: 'Guidelines',
-//     children: [
-//       { id: 'Quality', icon: <SettingsIcon /> },
-//       { id: 'Performance', icon: <TimerIcon /> },
-//       { id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
-//     ],
-//   },
-// ];
 
 const item = {
   py: '2px',
@@ -95,7 +55,7 @@ export default function Nav(props) {
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-          HSFD System
+        <i className="fas fa-utensils"></i> <h3 style={{marginLeft:'4px'}}>hsfd</h3>
         </ListItem>
         <ListItem sx={{ ...item, ...itemCategory }}>
           <ListItemIcon>

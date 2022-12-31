@@ -1,9 +1,9 @@
 
 
 .hero{
-    height:350px;
+    height:510px;
     border-radius: 0.5rem;
-    background-image:'../../../../frontend/public/images/backHotel.jpg';
+    background-image:url(./banner.jpg);
     background-size:cover;
     background-repeat:no-repeat;
     position:relative;
@@ -35,5 +35,12 @@
   }
   .hero .content p{
     font-family: 'Montserrat', sans-serif;
+  }
+
+  @media (max-width:768px){
+    .hero .content h1{
+      font-size:35px;
+     
+    }
   }
   

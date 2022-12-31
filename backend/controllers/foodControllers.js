@@ -18,7 +18,7 @@ exports.createFood=catchAsyncErrors(async(req,res,next)=>{
     req.body.user=req.body.owner;
 
     const { name, description, category,quantity,owner,country,state,district}=req.body;
-    // console.log(req.body.user ,req.body.id)
+    console.log(req.body.user ,req.body.id)
 
     const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
         folder: "avatars",
@@ -26,6 +26,13 @@ exports.createFood=catchAsyncErrors(async(req,res,next)=>{
         width: 250,
         crop: "scale",
       });
+      console.log({
+        name, description, category,quantity,owner,country,state,district,
+        image: {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        },
+    })
 
     const food=await Food.create({
         name, description, category,quantity,owner,country,state,district,
@@ -51,7 +58,7 @@ exports.getAllFoods=catchAsyncErrors(async(req,res)=>{
     // const resultPerPage=5;
     const resultPerPage=25;
   
-    console.log(req.body)
+    // console.log(req.body)
     // const foodsCount=await Food.countDocuments()
 //    const apiFeature = new ApiFeatures(Food.find(),req.query).search().filter().pagination(resultPerPage)
   
@@ -61,8 +68,8 @@ exports.getAllFoods=catchAsyncErrors(async(req,res)=>{
 
    const totalFoods= await Food.find();
    //  total Donations By This Hotel
-//    const foods = totalFoods.filter((food)=> food.accepted == false && food.country === country  && food.district === district && food.state === state)
-const foods = totalFoods.filter((food)=> console.log( food.country , country ,"||",food.district, district ,"||",food.state ,state))
+   const foods = totalFoods.filter((food)=> food.accepted == false && food.country === country  && food.district === district && food.state === state)
+// const foods = totalFoods.filter((food)=> console.log( food.country , country ,"||",food.district, district ,"||",food.state ,state))
 
   
 //    -----------------------------------------
@@ -424,12 +431,14 @@ const foodDetails ={ acceptedFoodDetails,
 //Total Foods that a Volunteer requested -- accept => false  | accept => true 
 
 exports.totalFoodVolRequested=catchAsyncErrors(async(req,res,next)=>{
-  const foods=await Food.find({accepted:false});
+    const  { userId} =req.body;
+    const foods=await Food.find({accepted:false});
+
   let totalFoods=[]
   
    foods.forEach(food => {
     food.requests.forEach((rev)=>{
-        if(rev.user.toString() == requestId.toString()){
+        if(rev.user.toString() == userId.toString()){
             totalFoods.push({foodId:food._id,comment:rev.comment})
         }
    });

@@ -4,7 +4,7 @@ const { isAuthenticatedUser ,authorizeRoles} = require("../middleware/auth");
 const router = express.Router();
 
 
-router.route("/foods").get(getAllFoods)
+router.route("/foods").post(isAuthenticatedUser,authorizeRoles("volunteer"),getAllFoods)
 router.route("/hotel/food/new").post(isAuthenticatedUser,authorizeRoles("hotel"),createFood)
 router.route("/food/:id").put(isAuthenticatedUser,authorizeRoles("hotel"),updateFood).delete(isAuthenticatedUser,authorizeRoles("hotel"),deleteFood)
 

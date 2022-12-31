@@ -57,7 +57,7 @@ export const getFoods =
 
     console.log(place)
 
-      const { data } = await axios.get(link,place);
+      const { data } = await axios.post(link,place);
 
       dispatch({
         type: ALL_FOOD_SUCCESS,
@@ -88,7 +88,7 @@ export const createFood = (FoodData) => async (dispatch) => {
       config
     );
     
-console.log(FormData)
+// console.log(FormData)
     dispatch({
       type: NEW_FOOD_SUCCESS,
       payload: data,
@@ -191,7 +191,7 @@ export const newFoodRequest = (commentData) => async (dispatch) => {
       type: NEW_COMMENT_FAIL,
       payload: error.response.data.message,
     });
-   alert(error.response.data.message)
+  
   }
 };
 
@@ -319,6 +319,7 @@ export const totalFoodRequestOfVol= (userId) => async (dispatch) => {
       type: TOTAL_FOOD_VOL_SUCCESS,
       payload: data.totalFoods,
     });
+    
    
   } catch (error) {
     dispatch({

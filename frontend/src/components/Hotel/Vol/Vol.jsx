@@ -1,6 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-
-import { useSelector, useDispatch } from "react-redux";
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,64 +15,49 @@ import Title from '../Dashboard/Title.js';
 import { getAllVols } from "../../../actions/userActions.js";
 import Paperbase from "../MUI/Paperbase.js";
 import { ListItem, Paper } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import store from "../../../store.js";
+import { loadUser,clearErrors } from "../../../actions/userActions";
+import { useSnackbar } from 'notistack';
+import MetaData from "../../layouts/MetaData.js";
 
-
-
-// Generate Order Data
-// function createData(id, date, name, shipTo, paymentMethod, amount) {
-//   return { id, date, name, shipTo, paymentMethod, amount };
-// }
-
-// const rows = [
-//   createData(
-//     0,
-//     '16 Mar, 2019',
-//     'Elvis Presley',
-//     'Tupelo, MS',
-//     'VISA ⠀•••• 3719',
-//     312.44,
-//   ),
-//   createData(
-//     1,
-//     '16 Mar, 2019',
-//     'Paul McCartney',
-//     'London, UK',
-//     'VISA ⠀•••• 2574',
-//     866.99,
-//   ),
-//   createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-//   createData(
-//     3,
-//     '16 Mar, 2019',
-//     'Michael Jackson',
-//     'Gary, IN',
-//     'AMEX ⠀•••• 2000',
-//     654.39,
-//   ),
-//   createData(
-//     4,
-//     '15 Mar, 2019',
-//     'Bruce Springsteen',
-//     'Long Branch, NJ',
-//     'VISA ⠀•••• 5919',
-//     212.79,
-//   ),
-// ];
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function Vols({user}) {
+export default function Vols() {
   const dispatch = useDispatch();
   // const alert = useAlert();
+  const {isAuthenticated, user} = useSelector((state) => state.user);
+ 
   const {
  volunteers,
     loading,
+    error
 
   } = useSelector((state) => state.volunteers);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbar = (type,message) => {
+    enqueueSnackbar(message, {
+      variant: type,
+    });
+  };
 
 
+  useEffect(() => {
+    if (error) {
+      showSnackbar("error",error)
+      dispatch(clearErrors());
+    }
+   
+  }, [error]);
+
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, [error]);
   useEffect(() => {
 
    dispatch(getAllVols());
@@ -85,6 +68,7 @@ export default function Vols({user}) {
 
   return (
    <>
+    <MetaData title={`Volunteers`} />
    <Paperbase user={user} children={ <React.Fragment>
     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
       <Title>Registered Volunteers</Title>

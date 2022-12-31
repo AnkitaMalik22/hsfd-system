@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import FoodsVol from './FoodsVol.js'
 import VolHome from './VolHome.js'
+import store from "../../../store.js";
+import { loadUser } from "../../../actions/userActions";
 
-const ShowAllFoodVol = ({user}) => {
+const ShowAllFoodVol = () => {
+  const dispatch = useDispatch();
+  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+  useEffect(() => {
+    store.dispatch(loadUser())
+   
+  }, []);
   return (
-
-        <VolHome user={user} children={<FoodsVol user={user}/>}/>
+<>
+<VolHome user={user} children={<FoodsVol />}/>
+</>
+      
   )
 }
 
