@@ -116,7 +116,7 @@ const LoginSignUp = ({ history, location }) => {
 
   useEffect(() => {
     if (error) {
-      // alert.error(error);
+      showSnackbar("error",error)
       dispatch(clearErrors());
     }
     if (isAuthenticated) {

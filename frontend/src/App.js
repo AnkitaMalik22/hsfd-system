@@ -3,7 +3,7 @@ import { Routes, Route} from "react-router-dom";
 import { useEffect} from "react";
 import { useSelector } from 'react-redux';import { createTheme,  ThemeProvider ,Box,Stack, Button, Typography} from "@mui/material";
 import { useState } from "react";
-import NavBar from "./components/Navbar";
+
 
 import LoginSignUp from "./components/User/LoginSignUp.js";
 import UpdatePassword from "./components/User/UpdatePassword";
