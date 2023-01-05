@@ -1,5 +1,5 @@
 
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route, useNavigate} from "react-router-dom";
 import { useEffect} from "react";
 import { useSelector } from 'react-redux';import { createTheme,  ThemeProvider ,Box,Stack, Button, Typography} from "@mui/material";
 import { useState } from "react";
@@ -39,7 +39,7 @@ import Profile from "./components/User/Profile";
 
 function App() {
   
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const dispatch = useDispatch();
   const [mode, setMode] = useState("light");
   const [role, setRole] = useState("");
@@ -81,6 +81,7 @@ function App() {
 
     <Routes>
     <Route exact path="/login" element={<LoginSignUp/>} />
+    {/* {isAuthenticated &&   <Route path="/" element={<p>{navigate('/home')}</p>} />} */}
     {/* <Route element={<ProtectedRoute/>}>/ */}
         <Route exact path="/password/update" element={<UpdatePassword/>} />
         <Route exact path="/password/forgot" element={<ForgotPassword/>} />
