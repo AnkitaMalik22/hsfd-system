@@ -7,14 +7,7 @@ const cloudinary=require("cloudinary")
 const crypto=require("crypto");
 const { send } = require("process");
 
-// import ErrorHandler from "../utils/errorhandler";
-// import catchAsyncErrors from "../middleware/catchAsyncErrors";
-// import User from "../models/userModel";
-// import sendToken from "../utils/jwtToken";
-// import sendEmail from"../utils/sendEmail";
-// import cloudinary from "cloudinary"
-// import crypto from"crypto";
-// import { send } from "process";
+
 
 //Register User
 exports.registerUser=catchAsyncErrors(async(req,res,next)=>{
@@ -26,6 +19,17 @@ exports.registerUser=catchAsyncErrors(async(req,res,next)=>{
       });
     
     const {role,name,email,password,country,state,district}=req.body;
+//     console.log({
+//         role,
+//         name,
+//         email,
+//         password,
+//   country,state,district,
+//             avatar: {
+//                 public_id: myCloud.public_id,
+//                 url: myCloud.secure_url,
+//             },
+//         })
    
     const user= await User.create({
         role,
