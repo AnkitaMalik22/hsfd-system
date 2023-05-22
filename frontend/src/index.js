@@ -8,7 +8,7 @@ import store from "./store.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+
     <BrowserRouter>
       <Provider store={store}>
         <SnackbarProvider maxSnack={3}>
@@ -16,5 +16,5 @@ root.render(
         </SnackbarProvider>
       </Provider>
     </BrowserRouter>
-  </React.StrictMode>
+
 );

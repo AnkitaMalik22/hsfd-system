@@ -25,7 +25,7 @@ const categories = [
       {id:'Add Food' , icon:<Add/>,page:'add/food'},
       {id:'Requests' , icon:<Inbox/>,page:'requests'}
     ],
-    }
+    }  
     
  
 ];
@@ -33,7 +33,7 @@ const categories = [
 
 const item = {
   py: '2px',
-  px: 3,
+  px: 3, 
   color: 'rgba(255, 255, 255, 0.7)',
   '&:hover, &:focus': {
     bgcolor: 'rgba(255, 255, 255, 0.08)',

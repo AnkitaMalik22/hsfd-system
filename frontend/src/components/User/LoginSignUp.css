@@ -5,7 +5,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(231, 231, 231);
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.5) 100%
+    ),
+    url('../common/banner.jpg');
+
+  background-size: cover;
+  background-position: center;
   position: fixed;
   top: 0%;
   left: 0;
@@ -14,7 +22,7 @@
 .LoginSignUpBox {
   background-color: white;
   width: 35vw;
-  height: 80vh;
+  height: 84vh;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -53,6 +61,7 @@
   justify-content: space-evenly;
   height: 70%;
   transition: all 0.5s;
+  border-radius: 0.6rem;
 }
 
 .signUpForm {

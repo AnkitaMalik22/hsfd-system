@@ -3,13 +3,12 @@ import MetaData from "../layouts/MetaData.js";
 import Loader from "../layouts/Loader/Loader";
 import { Link } from "react-router-dom";
 import "./Profile.css";
-import { Box } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import store from "../../store.js";
 import { loadUser } from "../../actions/userActions.js";
-import VolHome from "../Volunteer/MUI/VolHome.js";
-import Paperbase from "../Hotel/MUI/Paperbase.js";
+import Paperbase from "../common/Paperbase.jsx";
 import LoginSignUp from "./LoginSignUp.js";
 
 
@@ -46,7 +45,8 @@ const ProfileContent = ({user,loading}) => {
               </div>
 
               <div>
-                <Link to="/requests">My Requests</Link>
+                { user & user.role==='hotel' ? (<Link to="/requests">Requests</Link>) : (<Link to="/requests/my">My Requests</Link>)}
+                
                 <Link to="/password/update">Change Password</Link>
               </div>
             </div>
@@ -64,8 +64,7 @@ const ProfileContent = ({user,loading}) => {
 
 const Profile = () => {
   const { user, loading, isAuthenticated } = useSelector((state) => state.user);
-  const navigate=useNavigate()
-  const dispatch = useDispatch();
+
 
   useEffect(() => {
     store.dispatch(loadUser())
@@ -74,7 +73,7 @@ const Profile = () => {
 
   return (
 
-    <>{user && user.role ? (user.role==='volunteer'? <VolHome user={user} children={<ProfileContent user={user} loading={loading} />}/>  : <Paperbase user={user} children={<ProfileContent user={user} loading={loading} />}/> ) : (<LoginSignUp/>) }</>
+    <>{user && user.role ? (user.role==='volunteer'? <Paperbase user={user} children={<ProfileContent user={user} loading={loading} />}/>  : <Paperbase user={user} children={<ProfileContent user={user} loading={loading} />}/> ) : (<LoginSignUp/>) }</>
   )
 }
 

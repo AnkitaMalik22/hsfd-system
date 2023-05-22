@@ -1,0 +1,69 @@
+.hero {
+  height: 528px;
+  border-radius: 0.5rem;
+  background-image: url(./banner.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 2.5rem;
+  
+}
+.full-view{
+  width: 100vw !important;
+  height: 100vh !important;
+  position: static;
+  margin: 0 auto;
+
+}
+.login-welcome{
+  border: 1px solid white;
+  background-color: transparent;
+  padding: 0.5rem 2rem;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.5s ease-in-out;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+
+}
+.login-welcome:hover{
+  background-color: white;
+  border: none;
+  color: #000;
+  cursor: pointer;
+
+}
+.hero .overlay {
+  background-color: #000;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  opacity: 0.5;
+}
+.hero .content {
+  color: #fff;
+  z-index: 2;
+  text-align: center;
+}
+.hero .content h1 {
+  font-size: 45px;
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+}
+.hero .content p {
+  font-family: "Montserrat", sans-serif;
+}
+
+@media (max-width: 768px) {
+  .hero .content h1 {
+    font-size: 35px;
+  }
+}

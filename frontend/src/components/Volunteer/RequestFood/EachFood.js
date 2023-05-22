@@ -1,63 +1,52 @@
 import React, { useEffect } from "react";
-import { useParams } from 'react-router-dom'
-import { getFoodDetails } from '../../../actions/foodAction.js';
-// import CardFood from '../Card';
-import VolHome from '../MUI/VolHome.js'
+import { useParams } from "react-router-dom";
+import { getFoodDetails } from "../../../actions/foodAction.js";
+import VolHome from "../../common/Paperbase.jsx";
 import { useSelector, useDispatch } from "react-redux";
-import Food from './Food.js';
+import Food from "./Food.js";
 import store from "../../../store.js";
-import { loadUser,clearErrors } from "../../../actions/userActions";
-import { useSnackbar } from 'notistack';
+import { loadUser, clearErrors } from "../../../actions/userActions";
+import { useSnackbar } from "notistack";
 import MetaData from "../../layouts/MetaData.js";
 
-
 const EachFood = () => {
-
   const dispatch = useDispatch();
-  const {isAuthenticated, user,loading} = useSelector((state) => state.user);
+  const { isAuthenticated, user, loading } = useSelector((state) => state.user);
 
-  const{food,error}=useSelector((state)=>state.foodDetails)
+  const { food, error } = useSelector((state) => state.foodDetails);
   const id = useParams();
-    const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const showSnackbar = (type,message) => {
+  const showSnackbar = (type, message) => {
     enqueueSnackbar(message, {
       variant: type,
     });
   };
 
-
-
- useEffect(() => {
-    store.dispatch(loadUser())
-   
+  useEffect(() => {
+    store.dispatch(loadUser());
   }, []);
 
   useEffect(() => {
     if (error) {
-      showSnackbar("error",error)
+      showSnackbar("error", error);
       dispatch(clearErrors());
     }
   }, [error]);
 
-  
   useEffect(() => {
-   
-  
     if (food) {
       dispatch(getFoodDetails(id.id));
     }
   }, [dispatch, food]);
-  
-    
+
   return (
-<>
-<MetaData title="Food" />
+    <>
+      <MetaData title="Food" />
 
-<VolHome user={user} children={<Food food={food} />} />
-
-</>
-  )
-  }
+      <VolHome user={user} children={<Food food={food} />} />
+    </>
+  );
+};
 
 export default EachFood;

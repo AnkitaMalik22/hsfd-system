@@ -13,7 +13,7 @@ import {
   foodsOfThisMonthReducer,
   totalFoodsReducer,
   totalAcceptOfVolReducer,
-  totalfoodRequestVolReducer
+  totalfoodRequestVolReducer,
 } from "./reducers/foodReducer";
 
 import {
@@ -26,48 +26,30 @@ import {
   userReducer,
 } from "./reducers/userReducer";
 
-
-// import { cartReducer } from "./reducers/cartReducer";
-// import {
-//   allOrdersReducer,
-//   myOrdersReducer,
-//   newOrderReducer,
-//   orderDetailsReducer,
-//   orderReducer,
-// } from "./reducers/orderReducer";
-
 const reducer = combineReducers({
   foods: foodsReducer,
   foodDetails: foodDetailsReducer,
   user: userReducer,
   profile: profileReducer,
   forgotPassword: forgotPasswordReducer,
-//   cart: cartReducer,
-//   newOrder: newOrderReducer,
-//   myOrders: myOrdersReducer,
-//   orderDetails: orderDetailsReducer,
- newFoodRequest:newFoodRequestReducer,
+  newFoodRequest: newFoodRequestReducer,
   newFood: newFoodReducer,
   food: foodReducer,
-//   allOrders: allOrdersReducer,
-//   order: orderReducer,
   allUsers: allUsersReducer,
   userDetails: userDetailsReducer,
- foodRequests: allFoodRequestsReducer,
+  foodRequests: allFoodRequestsReducer,
   acceptRequest: acceptFoodRequestReducer,
-  foodPicked : markPickedFoodReducer,
-  foodsPerMonth : foodsOfThisMonthReducer,
-  totalFoods : totalFoodsReducer,
-  acceptedFoods : totalAcceptOfVolReducer,
-  hotels  : allHotelsReducer,
- volunteers: allVolunteersReducer,
- totalRequestsVol : totalfoodRequestVolReducer
+  foodPicked: markPickedFoodReducer,
+  foodsPerMonth: foodsOfThisMonthReducer,
+  totalFoods: totalFoodsReducer,
+  acceptedFoods: totalAcceptOfVolReducer,
+  hotels: allHotelsReducer,
+  volunteers: allVolunteersReducer,
+  totalRequestsVol: totalfoodRequestVolReducer,
 });
 
 let initialState = {
-  user: {
-  
-  },
+  user: {},
 };
 
 const middleware = [thunk];

@@ -5,15 +5,12 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-// import ListItem from '@material-ui/core/ListItem';
-// import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import Title from '../Dashboard/Title.js';
+import Title from "../../common/Title";
 import { getAllVols } from "../../../actions/userActions.js";
-import Paperbase from "../MUI/Paperbase.js";
+import Paperbase from "../../common/Paperbase.jsx";
 import { ListItem, Paper } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import store from "../../../store.js";
@@ -72,21 +69,18 @@ export default function Vols() {
    <Paperbase user={user} children={ <React.Fragment>
     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
       <Title>Registered Volunteers</Title>
-      <Table size="small">
+      <Table size='small' >
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
-            <TableCell align="right">Email</TableCell>
-            {/* <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell> */}
+            <TableCell align="right" sx={{ display : {xs : 'none',sm:'table-cell'}}}>Email</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           { volunteers && volunteers.map(( volunteer) => (
 
 
-            <TableRow key={ volunteer.name}>
+            <TableRow  key={volunteer._id}>
 
 
               <TableCell>
@@ -101,11 +95,8 @@ export default function Vols() {
             <ListItemText id={volunteer._id} primary={`${volunteer.name}`} />
              </ListItem>
               </TableCell>
-              <TableCell align="right">{volunteer.email}</TableCell>
-              {/* <TableCell>{row.name}</TableCell>
+              <TableCell align="right" sx={{ display : {xs : 'none',sm:'table-cell'}}}>{volunteer.email}</TableCell>
             
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell> */}
             </TableRow>
           ))}
         </TableBody>

@@ -3,9 +3,6 @@ import {
   ALL_FOOD_FAIL,
   ALL_FOOD_REQUEST,
   ALL_FOOD_SUCCESS,
-  // ADMIN_FOOD_REQUEST,
-  // ADMIN_FOOD_SUCCESS,
-  // ADMIN_FOOD_FAIL,
   NEW_FOOD_REQUEST,
   NEW_FOOD_SUCCESS,
   NEW_FOOD_FAIL,
@@ -43,35 +40,31 @@ import {
   TOTAL_ACCEPTED_FAIL,
   TOTAL_FOOD_VOL_REQUEST,
   TOTAL_FOOD_VOL_SUCCESS,
-  TOTAL_FOOD_VOL_FAIL
+  TOTAL_FOOD_VOL_FAIL,
 } from "../constants/foodConstant";
 
 // Get All FOODs
-export const getFoods =
-  (place) =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: ALL_FOOD_REQUEST });
+export const getFoods = (place) => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_FOOD_REQUEST });
 
-      let link = `/api/v1/foods`;
+    let link = `/api/v1/foods`;
 
-    console.log(place)
+    console.log(place);
 
-      const { data } = await axios.post(link,place);
+    const { data } = await axios.post(link, place);
 
-      dispatch({
-        type: ALL_FOOD_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: ALL_FOOD_FAIL,
-        payload: error.response.data.message,
-      });
-    }
-  };
-
-
+    dispatch({
+      type: ALL_FOOD_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ALL_FOOD_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
 // Create FOOD
 export const createFood = (FoodData) => async (dispatch) => {
@@ -87,8 +80,8 @@ export const createFood = (FoodData) => async (dispatch) => {
       FoodData,
       config
     );
-    
-// console.log(FormData)
+
+    // console.log(FormData)
     dispatch({
       type: NEW_FOOD_SUCCESS,
       payload: data,
@@ -110,11 +103,7 @@ export const updateFood = (id, FoodData) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     };
 
-    const { data } = await axios.put(
-      `/api/v1/food/${id}`,
-      FoodData,
-      config
-    );
+    const { data } = await axios.put(`/api/v1/food/${id}`, FoodData, config);
 
     dispatch({
       type: UPDATE_FOOD_SUCCESS,
@@ -133,7 +122,7 @@ export const deleteFood = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_FOOD_REQUEST });
 
-    const { data } = await axios.delete( `/api/v1/food/${id}`);
+    const { data } = await axios.delete(`/api/v1/food/${id}`);
 
     dispatch({
       type: DELETE_FOOD_SUCCESS,
@@ -149,20 +138,19 @@ export const deleteFood = (id) => async (dispatch) => {
 
 // Get FOODs Details
 export const getFoodDetails = (id) => async (dispatch) => {
-
   try {
     dispatch({ type: FOOD_DETAILS_REQUEST });
 
     const { data } = await axios.get(`/api/v1/food/${id}`);
-//     console.log('****************************');
-// console.log(data);
-// console.log('=************************');
+
+    // console.log(data);
+    // console.log('=************************');
 
     dispatch({
       type: FOOD_DETAILS_SUCCESS,
       payload: data.food,
     });
-    console.log(data.food)
+    console.log(data.food);
   } catch (error) {
     dispatch({
       type: FOOD_DETAILS_FAIL,
@@ -180,7 +168,7 @@ export const newFoodRequest = (commentData) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     };
 
-    const { data } = await axios.put(`/api/v1/request`,commentData, config);
+    const { data } = await axios.put(`/api/v1/request`, commentData, config);
 
     dispatch({
       type: NEW_COMMENT_SUCCESS,
@@ -191,7 +179,6 @@ export const newFoodRequest = (commentData) => async (dispatch) => {
       type: NEW_COMMENT_FAIL,
       payload: error.response.data.message,
     });
-  
   }
 };
 
@@ -216,12 +203,13 @@ export const getAllRequests = (id) => async (dispatch) => {
 
 // ACCEPT FOOD REQUEST
 
-export const acceptFoodRequest = (requestId,foodId) => async (dispatch) => {
+export const acceptFoodRequest = (requestId, foodId) => async (dispatch) => {
   try {
     dispatch({ type: ACCEPT_COMMENT_REQUEST });
 
     const { data } = await axios.put(
-      `/api/v1/request/accept/${foodId}` , requestId
+      `/api/v1/request/accept/${foodId}`,
+      requestId
     );
 
     dispatch({
@@ -234,9 +222,8 @@ export const acceptFoodRequest = (requestId,foodId) => async (dispatch) => {
       type: ACCEPT_COMMENT_FAIL,
       payload: error.response.data.message,
     });
-    console.log( error.response.data.message);
-
-  } 
+    console.log(error.response.data.message);
+  }
 };
 
 // MARK FOOD PICKED
@@ -245,8 +232,7 @@ export const markFoodPicked = (foodId) => async (dispatch) => {
   try {
     dispatch({ type: FOOD_PICKED_REQUEST });
 
-    const { data } = await axios.put(
-      `/api/v1/food/picked/${foodId}`);
+    const { data } = await axios.put(`/api/v1/food/picked/${foodId}`);
 
     dispatch({
       type: FOOD_PICKED_SUCCESS,
@@ -258,8 +244,7 @@ export const markFoodPicked = (foodId) => async (dispatch) => {
       type: FOOD_PICKED_FAIL,
       payload: error.response.data.message,
     });
-
-  } 
+  }
 };
 
 // MARK FOOD PICKED
@@ -268,8 +253,9 @@ export const foodsOfThisMonth = (userId) => async (dispatch) => {
   try {
     dispatch({ type: FOODS_PER_MONTH_REQUEST });
 
-    const { data } = await axios.post(
-      `/api/v1/foods/month`,{userId  : userId});
+    const { data } = await axios.post(`/api/v1/foods/month`, {
+      userId: userId,
+    });
 
     dispatch({
       type: FOODS_PER_MONTH_SUCCESS,
@@ -281,74 +267,67 @@ export const foodsOfThisMonth = (userId) => async (dispatch) => {
       type: FOODS_PER_MONTH_FAIL,
       payload: error.response.data.message,
     });
-
-  } 
+  }
 };
 
-
-
-export const totalFoodsOfHotel= (userId) => async (dispatch) => {
+export const totalFoodsOfHotel = (userId) => async (dispatch) => {
   try {
     dispatch({ type: TOTAL_FOOD_REQUEST });
 
-    const { data } = await axios.post(
-      `/api/v1/foods/total`,{userId  : userId});
+    const { data } = await axios.post(`/api/v1/foods/total`, {
+      userId: userId,
+    });
 
     dispatch({
       type: TOTAL_FOOD_SUCCESS,
       payload: data.totalFoods,
     });
-   
   } catch (error) {
     dispatch({
-      type:TOTAL_FOOD_FAIL,
+      type: TOTAL_FOOD_FAIL,
       payload: error.response.data.message,
     });
-
-  } 
+  }
 };
 
-export const totalFoodRequestOfVol= (userId) => async (dispatch) => {
+export const totalFoodRequestOfVol = (userId) => async (dispatch) => {
   try {
     dispatch({ type: TOTAL_FOOD_VOL_REQUEST });
 
-    const { data } = await axios.post(
-      `/api/v1/food/requests/vol`,{userId  : userId});
+    const { data } = await axios.post(`/api/v1/food/requests/vol`, {
+      userId: userId,
+    });
 
     dispatch({
       type: TOTAL_FOOD_VOL_SUCCESS,
       payload: data.totalFoods,
     });
-    
-   
   } catch (error) {
     dispatch({
-      type:TOTAL_FOOD_VOL_FAIL,
+      type: TOTAL_FOOD_VOL_FAIL,
       payload: error.response.data.message,
     });
-
-  } 
+  }
 };
 
-export const totalAcceptOfVol= (userId) => async (dispatch) => {
+export const totalAcceptOfVol = (userId) => async (dispatch) => {
   try {
     dispatch({ type: TOTAL_ACCEPTED_REQUEST });
 
-    const { data } = await axios.post(
-      `/api/v1/foods/accepted`,{userId  : userId});
+    const { data } = await axios.post(`/api/v1/foods/accepted`, {
+      userId: userId,
+    });
 
     dispatch({
       type: TOTAL_ACCEPTED_SUCCESS,
       payload: data.foodDetails,
     });
-
   } catch (error) {
     dispatch({
-      type:TOTAL_ACCEPTED_FAIL,
+      type: TOTAL_ACCEPTED_FAIL,
       payload: error.response.data.message,
     });
-
-  } 
+  }
 };
 
 // Clearing Errors

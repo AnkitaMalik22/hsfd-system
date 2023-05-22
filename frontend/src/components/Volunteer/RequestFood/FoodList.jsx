@@ -1,34 +1,26 @@
-import React from 'react'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
 
-const FoodList = ({food}) => {
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import { useNavigate } from "react-router-dom";
 
-   const navigate= useNavigate();
+const FoodList = ({ food }) => {
+  const navigate = useNavigate();
   return (
-
     <>
-        <TableRow  key={food._id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/volunteer/food/${food._id}`)}>
-          <TableCell  component="th" scope="row" >
-            {food.name}
-          </TableCell>
-    
-          <TableCell align="right">{food.owner}</TableCell>
-       
+      <TableRow
+        key={food._id}
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate(`/volunteer/food/${food._id}`)}
+      >
+        <TableCell component="th" scope="row">
+          {food.name}
+        </TableCell>
 
-        </TableRow>
-    
-
-
-    
+        <TableCell align="right" sx={{ display : {xs : 'none',sm:'table-cell'}}}>{food.owner}</TableCell>
+      </TableRow>
     </>
+  );
+};
 
-
-  )
-}
-
-export default FoodList
+export default FoodList;

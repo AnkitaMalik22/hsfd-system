@@ -1,106 +1,88 @@
-
-import React, { Fragment,  useState, useEffect ,useLayoutEffect} from "react";
+import React, { Fragment, useState, useEffect, useLayoutEffect } from "react";
 import Loader from "../../layouts/Loader/Loader.js";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 //also check is authenticated or not
 import { clearErrors, createFood } from "../../../actions/foodAction.js";
-import './AddFood.css'
-import { Category, FoodBank, FoodBankOutlined, HotelOutlined,EventAvailable } from "@mui/icons-material";
-import store from '../../../store.js'
+import "./AddFood.css";
+import {
+  Category,
+  FoodBank,
+  FoodBankOutlined,
+  HotelOutlined,
+  EventAvailable,
+} from "@mui/icons-material";
+import store from "../../../store.js";
 import { loadUser } from "../../../actions/userActions.js";
 import MetaData from "../../layouts/MetaData.js";
-
-
-
 
 const AddFood = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, user ,loading} = useSelector((state) => state.user);
+  const { isAuthenticated, user, loading } = useSelector((state) => state.user);
 
-  const { error, success,food,load } = useSelector(
-    (state) => state.newFood
-  );
+  const { error, success, food, load } = useSelector((state) => state.newFood);
   const [addFood, setAddFood] = useState({
-    name:"",
+    name: "",
     description: "",
     quantity: "",
-    category:""
-   
+    category: "",
   });
-  const { name, description,quantity,category } = addFood;
+  const { name, description, quantity, category } = addFood;
   const [image, setImage] = useState("/images/FoodPreview.png");
 
-  const [place ,setPlace] = useState({
-   owner:``,
-    country:``,
-    state:``,
-    district:``,
+  const [place, setPlace] = useState({
+    owner: ``,
+    country: ``,
+    state: ``,
+    district: ``,
+  });
+  const { owner, country, district, state } = place;
 
-})
-const {owner,country,district,state}=place;
-  // const [category ,setCategory]= useState("")
-  // const images=[];
   const [imagePreview, setImagePreview] = useState("/images/FoodPreview.png");
-
 
   useEffect(() => {
     store.dispatch(loadUser());
-  }, [])
+  }, []);
   useLayoutEffect(() => {
     setPlace({
-      owner: user && user._id ? `${user._id}` : '',
-      country: user && user.country ? `${user.country}` : '',
-      state: user && user.state ? `${user.state}` : '',
-      district: user && user.district ? `${user.district}` : '',
+      owner: user && user._id ? `${user._id}` : "",
+      country: user && user.country ? `${user.country}` : "",
+      state: user && user.state ? `${user.state}` : "",
+      district: user && user.district ? `${user.district}` : "",
     });
-
-  }, [isAuthenticated])
+  }, [isAuthenticated]);
 
   useEffect(() => {
-
     if (error) {
-      showSnackbar("error",error)
+      showSnackbar("error", error);
       dispatch(clearErrors());
     }
-  
- 
+
     if (success) {
-    
-      showSnackbar("success","Food Added Successfully");
-     setAddFood({
-        name:"",
+      showSnackbar("success", "Food Added Successfully");
+      setAddFood({
+        name: "",
         description: "",
         quantity: "",
-        category:""
-       
+        category: "",
       });
       setImage("/images/FoodPreview.png");
     }
-  }, [dispatch,error,success]);
+  }, [dispatch, error, success]);
 
-  const showSnackbar = (type,message) => {
+  const showSnackbar = (type, message) => {
     enqueueSnackbar(message, {
       variant: type,
     });
   };
 
-
-
-
   const foodSubmit = (e) => {
     e.preventDefault();
 
-    // user &&  setCountry(`${user.country}`)
-    // user &&  setState(`${user.state}`)
-    // user &&  setDistrict(`${user.district}`)
-    // user &&  setOwner(`${user._id}`) 
-
     const myForm = new FormData();
-    // const blob = new Blob([image], {type : 'text/xml'});
 
     myForm.set("name", name);
     myForm.set("description", description);
@@ -108,17 +90,12 @@ const {owner,country,district,state}=place;
     myForm.set("owner", owner);
     myForm.set("quantity", quantity);
     myForm.set("image", image);
-    myForm.set("country",country);
-    myForm.set("state",state);
-    myForm.set("district",district);
-// console.log(name,description,category,owner,state,country,district,quantity)
-    
-    dispatch(createFood(myForm));
-    // handleClickVariant('success')
-   
-  
-  };
+    myForm.set("country", country);
+    myForm.set("state", state);
+    myForm.set("district", district);
 
+    dispatch(createFood(myForm));
+  };
 
   const foodDataChange = (e) => {
     if (e.target.name === "image") {
@@ -126,67 +103,47 @@ const {owner,country,district,state}=place;
 
       reader.onload = () => {
         if (reader.readyState === 2) {
-        setImagePreview(reader.result);
-        // const res={url:`${reader.result}`,public_id:"img"};
-        setImage(reader.result);
+          setImagePreview(reader.result);
+
+          setImage(reader.result);
         }
       };
 
       reader.readAsDataURL(e.target.files[0]);
-    } 
-    console.log("quantity" ,quantity)
-    console.log("category" ,category)
-    // user &&  setCountry(`${user.country}`)
-    // user &&  setState(`${user.state}`)
-    // user &&  setDistrict(`${user.district}`)
-    // user &&  setOwner(`${user._id}`) 
-     
-      setAddFood({ ...addFood, [e.target.name]: e.target.value });
-    
+    }
+    console.log("quantity", quantity);
+    console.log("category", category);
+
+    setAddFood({ ...addFood, [e.target.name]: e.target.value });
   };
 
-
-
-
-
-
-
   return (
-
-
-<Fragment>
+    <Fragment>
       {loading || load ? (
         <Loader />
       ) : (
         <Fragment>
-   <MetaData title="Add Food" />
+          <MetaData title="Add Food" />
 
-          <div className="CreateFoodContainer">  
-          
-          <div className="CreateFoodBox">
-        
-            {/* <div className="CreateFoodBox__header"> */}
-              
-              <form
-                className="CreateFoodForm"
-                 onSubmit={foodSubmit}
-              >
-                  <div className="foodName">
-                    <FoodBank/>
+          <div className="CreateFoodContainer">
+            <div className="CreateFoodBox">
+              <form className="CreateFoodForm" onSubmit={foodSubmit}>
+                <div className="foodName">
+                  <FoodBank />
                   {/* <Food name icon/> */}
                   <input
-                   type="text"
-                   placeholder="Name"
-                   required
-                   name="name"
-                   value={name}
-                   onChange={foodDataChange}
+                    type="text"
+                    placeholder="Name"
+                    required
+                    name="name"
+                    value={name}
+                    onChange={foodDataChange}
                   />
                 </div>
                 <div className="foodDescription">
-                  <FoodBankOutlined/>
+                  <FoodBankOutlined />
                   {/* < Face /> */}
-                  
+
                   <input
                     type="text"
                     placeholder="Description"
@@ -196,56 +153,43 @@ const {owner,country,district,state}=place;
                     onChange={foodDataChange}
                   />
                 </div>
-              
+
                 <div className="foodCategory">
-                  <Category/>
-              
+                  <Category />
+
                   <select
-                   type="text"
-                   placeholder="Category"
-                   required
-                   name="category"
-                   value={category}
-                   onChange={foodDataChange}
-                >
-
-
-<option value='' disabled >None</option>
-          <option value='Fast food'>Fast food</option>
-          <option value='Bengali Food'>Bengali Food</option>
-          <option value='Chinese'>Chinese Food</option>
-        
-        </select>
+                    type="text"
+                    placeholder="Category"
+                    required
+                    name="category"
+                    value={category}
+                    onChange={foodDataChange}
+                  >
+                    <option value="" disabled>
+                      None
+                    </option>
+                    <option value="Fast food">Fast food</option>
+                    <option value="Bengali Food">Bengali Food</option>
+                    <option value="Chinese">Chinese Food</option>
+                  </select>
                 </div>
                 <div className="foodQuantity">
-               <EventAvailable/>
-                  {/* <LockOpen /> */}
-                  {/* <input
+                  <EventAvailable />
+
+                  <select
                     type="text"
                     placeholder="Quantity"
                     required
                     name="quantity"
-                    value={quantity}  
+                    value={quantity}
                     onChange={foodDataChange}
-                  />
-                </div> */}
-                <select
-                     type="text"
-                     placeholder="Quantity"
-                     required
-                     name="quantity"
-                     value={quantity}  
-                     onChange={foodDataChange}
-                >
-
-
-<option value='' >None</option>
-          <option value='1kg'>1kg</option>
-          <option value='6kg'>6kg</option>
-          <option value='11kg'>11kg</option>
-        
-        </select>
-                </div> 
+                  >
+                    <option value="">None</option>
+                    <option value="1kg">1kg</option>
+                    <option value="6kg">6kg</option>
+                    <option value="11kg">11kg</option>
+                  </select>
+                </div>
                 <div id="foodImage">
                   <img src={imagePreview} alt="Food Img Preview" />
                   <input
@@ -255,16 +199,16 @@ const {owner,country,district,state}=place;
                     onChange={foodDataChange}
                   />
                 </div>
-                
-                <input type="submit" value="CreateFood" className="addFoodBtn" />
-              </form>
-              </div>
-          </div>
-          
-          
-            {/* </div> */}
 
-               </Fragment>
+                <input
+                  type="submit"
+                  value="CreateFood"
+                  className="addFoodBtn"
+                />
+              </form>
+            </div>
+          </div>
+        </Fragment>
       )}
     </Fragment>
   );

@@ -4,21 +4,19 @@ import Loader from "../layouts/Loader/Loader.js";
 import { Link } from "react-router-dom";
 import MailOutline from "@mui/icons-material/MailOutline";
 import LockOpen from "@mui/icons-material/LockOpen";
-import  Face from "@mui/icons-material/Face";
+import Face from "@mui/icons-material/Face";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, login, register } from "../../actions/userActions.js";
-// import { useAlert } from "react-alert";/
-import {useNavigate } from "react-router-dom";
-import {  VerifiedUser } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { VerifiedUser } from "@mui/icons-material";
 
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import MetaData from "../layouts/MetaData";
-
 
 const LoginSignUp = ({ history, location }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const alert = useAlert();
+
 
   const { error, loading, isAuthenticated } = useSelector(
     (state) => state.user
@@ -31,36 +29,29 @@ const LoginSignUp = ({ history, location }) => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
- 
   const { enqueueSnackbar } = useSnackbar();
 
-  const showSnackbar = (type,message) => {
+  const showSnackbar = (type, message) => {
     enqueueSnackbar(message, {
       variant: type,
     });
   };
 
-
   const [user, setUser] = useState({
-    role:"",
+    role: "",
     name: "",
     email: "",
     password: "",
-    country:"",
-    state:"",
-    district:""
+    country: "",
+    state: "",
+    district: "",
   });
 
-  const { role, name, email, password ,country,state,district} = user;
+  const { role, name, email, password, country, state, district } = user;
 
   const [avatar, setAvatar] = useState("/Profile.png");
   const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
-//   const [place ,setPlace] = useState({
-//     country:"",
-//     state:"",
-//     district:"",
-// })
-// const { country,state,district } = place;
+
 
   const loginSubmit = (e) => {
     e.preventDefault();
@@ -77,18 +68,17 @@ const LoginSignUp = ({ history, location }) => {
     myForm.set("email", email);
     myForm.set("password", password);
     myForm.set("avatar", avatar);
-    myForm.set("country",country);
-    myForm.set("state",state);
-    myForm.set("district",district);
+    myForm.set("country", country);
+    myForm.set("state", state);
+    myForm.set("district", district);
 
     dispatch(register(myForm));
     if (error) {
-      showSnackbar("error",error)
+      showSnackbar("error", error);
     }
     if (isAuthenticated) {
-      showSnackbar("success",'registered successfully!')
+      showSnackbar("success", "registered successfully!");
     }
-
   };
 
   const registerDataChange = (e) => {
@@ -105,26 +95,22 @@ const LoginSignUp = ({ history, location }) => {
       reader.readAsDataURL(e.target.files[0]);
     } else {
       // console.log("role" ,role)
-     
-      setUser({ ...user, [e.target.name]: e.target.value });
 
+      setUser({ ...user, [e.target.name]: e.target.value });
     }
   };
 
-  
-  // const redirect = location.search ? location.search.split("=")[1] : "/account";
+
 
   useEffect(() => {
     if (error) {
-      showSnackbar("error",error)
+      showSnackbar("error", error);
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
-      // history.push(redirect);
-     navigate("/home");
+      navigate("/home");
     }
-
-  }, [dispatch, error, isAuthenticated,navigate]);
+  }, [dispatch, error, isAuthenticated, navigate]);
 
   const switchTabs = (e, tab) => {
     if (tab === "login") {
@@ -149,7 +135,7 @@ const LoginSignUp = ({ history, location }) => {
         <Loader />
       ) : (
         <Fragment>
-             <MetaData title="Login SignUp" />
+          <MetaData title="Login SignUp" />
           <div className="LoginSignUpContainer">
             <div className="LoginSignUpBox">
               <div>
@@ -160,7 +146,6 @@ const LoginSignUp = ({ history, location }) => {
                 <button ref={switcherTab}></button>
               </div>
               <form className="loginForm" ref={loginTab} onSubmit={loginSubmit}>
-              
                 <div className="loginEmail">
                   <MailOutline />
                   <input
@@ -190,38 +175,25 @@ const LoginSignUp = ({ history, location }) => {
                 encType="multipart/form-data"
                 onSubmit={registerSubmit}
               >
-                  <div className="signUpRole">
+                <div className="signUpRole">
+                  <VerifiedUser />
 
-
-       <VerifiedUser/>
-                  {/* <input
+                  <select
                     type="text"
                     placeholder="Role"
                     required
                     name="role"
                     value={role}
                     onChange={registerDataChange}
-                  />
-                </div> */}
-                 <select
-                   type="text"
-                   placeholder="Role"
-                   required
-                   name="role"
-                   value={role}
-                   onChange={registerDataChange}
-                >
-
-
-        <option value=''>select</option>
-          <option value='hotel'>hotel</option>
-          <option value='volunteer'>volunteer</option>
-        
-        </select>
-        </div>
+                  >
+                    <option value="">select</option>
+                    <option value="hotel">hotel</option>
+                    <option value="volunteer">volunteer</option>
+                  </select>
+                </div>
 
                 <div className="signUpName">
-                  < Face />
+                  <Face />
                   <input
                     type="text"
                     placeholder="Name"
@@ -231,7 +203,7 @@ const LoginSignUp = ({ history, location }) => {
                     onChange={registerDataChange}
                   />
                 </div>
-              
+
                 <div className="signUpEmail">
                   <MailOutline />
                   <input
@@ -256,40 +228,7 @@ const LoginSignUp = ({ history, location }) => {
                 </div>
 
                 <div className="signUpPlace">
-             
-
-
-         {/* <div>
-      
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-controlled-open-select-label">Country</InputLabel>
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          label="country"
-          name="country"
-          value={country}
-          onChange={registerDataChange}
-          style={{  marginRight :"3px"}}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value='India'>India</MenuItem>
-          <MenuItem value='Pakistan'>Pakistan</MenuItem>
-          <MenuItem value='India'>India</MenuItem>
-          <MenuItem value='France'>France</MenuItem>
-          <MenuItem value='Bangladesh'>Bangladesh</MenuItem>
-        </Select>
-      </FormControl>
-    </div> */}
-
-
-
-                   <select
+                  <select
                     type="text"
                     placeholder="Country"
                     list="place"
@@ -297,79 +236,49 @@ const LoginSignUp = ({ history, location }) => {
                     name="country"
                     value={country}
                     onChange={registerDataChange}
-                    style={{  marginRight :"3px"}}
-                >
+                    style={{ marginRight: "3px" }}
+                  >
+                    <option value="">
+                      <em>None</em>
+                    </option>
+                    <option value="India">India</option>
+                    <option value="Pakistan">Pakistan</option>
+                    <option value="India">India</option>
+                    <option value="France">France</option>
+                    <option value="Bangladesh">Bangladesh</option>
+                  </select>
 
-
-
-          <option value="">
-            <em>None</em>
-          </option>
-          <option value='India'>India</option>
-          <option value='Pakistan'>Pakistan</option>
-          <option value='India'>India</option>
-          <option value='France'>France</option>
-          <option value='Bangladesh'>Bangladesh</option>
-        </select>
-
-
-                     {/* < LocationCity /> */}
-                     <select
-                     style ={{  marginRight :"3px"}} 
+                  {/* < LocationCity /> */}
+                  <select
+                    style={{ marginRight: "3px" }}
                     type="text"
                     placeholder="State"
                     required
                     name="state"
                     value={state}
                     onChange={registerDataChange}
-                   >
-<option value="">
-            <em>None</em>
-          </option>
-          <option value='West Bengal'>West Bengal</option>
-          <option value='Uttar Pradesh'>Uttar Pradesh</option>
-          {/* <option value='India'>India</option>
-          <option value='France'>France</option>
-          <option value='Bangladesh'>Bangladesh</option> */}
+                  >
+                    <option value="">
+                      <em>None</em>
+                    </option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
                   </select>
 
                   <select
-                   type="text"
-                   placeholder="District"
-                   required
-                   name="district"
-                   value={district}
-                   onChange={registerDataChange}  >
-
-          <option value="">
-            <em>None</em>
-          </option>
-          <option value='Hooghly'>Hooghly</option>
-          <option value='Howrah'>Howrah</option>
-          {/* <option value='India'>India</option>
-          <option value='France'>France</option>
-          <option value='Bangladesh'>Bangladesh</option> */}
-        </select>
-
-                    
-                  {/* <input
-                    type="text"
-                    placeholder="State"
-                    required
-                    name="state"
-                    style={{  marginRight :"3px"}}
-                    value={state}
-                    onChange={registerDataChange}
-                  />
-                  {/* <LocalHotel/> */}
-                  {/* <input
                     type="text"
                     placeholder="District"
                     required
                     name="district"
                     value={district}
                     onChange={registerDataChange}
-                  /> */} 
+                  >
+                    <option value="">
+                      <em>None</em>
+                    </option>
+                    <option value="Hooghly">Hooghly</option>
+                    <option value="Howrah">Howrah</option>
+                  </select>
                 </div>
 
                 <div id="registerImage">
