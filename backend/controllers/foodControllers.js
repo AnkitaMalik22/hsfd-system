@@ -18,7 +18,6 @@ exports.createFood=catchAsyncErrors(async(req,res,next)=>{
     req.body.user=req.body.owner;
 
     const { name, description, category,quantity,owner,country,state,district}=req.body;
-    console.log(req.body.user ,req.body.id)
 
     const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
         folder: "avatars",

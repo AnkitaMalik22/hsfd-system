@@ -19,17 +19,7 @@ exports.registerUser=catchAsyncErrors(async(req,res,next)=>{
       });
     
     const {role,name,email,password,country,state,district}=req.body;
-//     console.log({
-//         role,
-//         name,
-//         email,
-//         password,
-//   country,state,district,
-//             avatar: {
-//                 public_id: myCloud.public_id,
-//                 url: myCloud.secure_url,
-//             },
-//         })
+
    
     const user= await User.create({
         role,
